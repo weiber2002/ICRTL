@@ -1,0 +1,1 @@
+vcs -timescale=1ns/10ps -full64 -R +v2k -sverilog -f rtl_01.f -debug_access+all +lint=TFIPC-L | tee rtl.log   

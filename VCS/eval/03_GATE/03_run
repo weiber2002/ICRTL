@@ -1,0 +1,1 @@
+vcs -timescale=1ns/10ps -f gate_sim.f -full64 -sverilog -R -debug_access+all +maxdelays -negdelay +neg_tchk
