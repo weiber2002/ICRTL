@@ -7,7 +7,7 @@
 
 * **Name**: `TOP`
 * **Clock**: `clk`, rising-edge.
-* **Reset**: `rst`, **asynchronous, active-high**.
+* **Reset**: `rst`, **Synchronous, active-high**.
 
   * While `rst=1`: internal state is cleared; `o_valid=0`;
   * On `rst` deassert (1→0): module is ready to accept a new tile per the rules below.

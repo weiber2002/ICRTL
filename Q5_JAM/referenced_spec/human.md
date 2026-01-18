@@ -21,12 +21,12 @@ The per-worker per-job **costs are stored in a synchronous 8×8 cost ROM** acces
 **Clocking & reset:**
 
 * `CLK`: rising-edge synchronous.
-* `RST`: **active-high, asynchronous** reset; testbench holds high for \~2 cycles then deasserts. While `RST=1`, internal state is cleared and no valid result is presented.&#x20;
+* `RST`: **active-high, Synchronous** reset; testbench holds high for \~2 cycles then deasserts. While `RST=1`, internal state is cleared and no valid result is presented.&#x20;
 
 **Ports (widths & meaning):**
 
 * `input  CLK` (1): system clock, posedge trigger.
-* `input  RST` (1): asynchronous active-high reset.
+* `input  RST` (1): Synchronous active-high reset.
 * `output reg [2:0] W` (3): worker index selector (**0..7**) into cost ROM row.
 * `output reg [2:0] J` (3): job index selector (**0..7**) into cost ROM column.
 * `input  [6:0] Cost` (7): **unsigned** cost returned by the ROM (range **0..100**).

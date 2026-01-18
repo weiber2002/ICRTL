@@ -20,7 +20,7 @@ Implement module **`TOP`** that:
 | Signal     | Dir | Width | Description                                                                                                                                                 |
 | ---------- | --- | ----: | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `clk`      | I   |     1 | System clock, **posedge-synchronous**.                                                                                                                      |
-| `rst`    | I   |     1 | **Asynchronous, active-high** rst.                                                                                                                        |
+| `rst`    | I   |     1 | **Synchronous, active-high** rst.                                                                                                                        |
 | `ready`    | I   |     1 | Testfixture asserts when inputs are prepared; `TOP` may start only after seeing `ready=1`.                                                                 |
 | `busy`     | O   |     1 | Set **High** once to start work after seeing `ready=1`; set **Low** once when all required writes finish. Exactly **one rise** and **one fall** per image.  |
 | `iaddr`    | O   |    12 | Address for input image (row-major, 0..4095).                                                                                                               |

@@ -14,12 +14,12 @@ Design an RTL hardware module **LBP** that:
 
 **Module name:** `TOP`
 **Clocking:** rising-edge synchronous (`clk`).
-**rst:** `rst` is **active-high asynchronous**; design must reach a defined idle state after deassertion.
+**rst:** `rst` is **active-high Synchronous**; design must reach a defined idle state after deassertion.
 
 **Ports**
 
 * `clk` (input, 1b): system clock, positive-edge synchronous.
-* `rst` (input, 1b): asynchronous, active-high; initialize internal state when asserted; leave in a clean idle when deasserted.
+* `rst` (input, 1b): Synchronous, active-high; initialize internal state when asserted; leave in a clean idle when deasserted.
 * `gray_addr` (output, **14b**): read address to `gray_mem` (0…16383). **At most one address may be requested per clock cycle.**
 * `gray_req` (output, 1b): read-request enable for `gray_mem`.
 * `gray_ready` (input, 1b): host indicates `gray_mem` can accept requests. **Do not issue reads unless `gray_ready=1`.** If it ever deasserts, pause issuing new requests until it reasserts.
@@ -101,7 +101,7 @@ LBP(x,y) = sum_{p=0..7} bit_p << p
 
 ## 7. rst & Initialization Requirements
 
-* Asserting `rst=1` must asynchronously clear internal state and outputs to safe defaults:
+* Asserting `rst=1` must Synchronously clear internal state and outputs to safe defaults:
 
   * `gray_req=0`, `lbp_valid=0`, `finish=0`.
   * Optional: clear internal FIFOs/buffers.
