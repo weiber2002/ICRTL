@@ -1,0 +1,68 @@
+TASK: Implement a SystemVerilog module that matches ONLY the following I/O and timing/state contract.
+
+MODULE
+  name: systolic
+  clock: clk (posedge)
+  reset: rst (ASYNCHRONOUS, ACTIVE-HIGH)
+    - While rst=1: clear internal state; drive o_valid=0; data outputs may be don't-care.
+    - On rst deassert (1→0): module is ready to accept a new tile per the rules below.
+  NOTE: All ports are 1-D flattened (no multi-dimensional arrays on the port list).
+
+PORTS
+  // Control & Clock
+  input  clk
+  input  rst
+  input  tile_en     // load enable; must be 1 for FOUR consecutive cycles to provide ONE tile
+
+  // Data Inputs (sampled ONLY on posedge when tile_en=1)
+  input  [15:0] tileA_data_0
+  input  [15:0] tileA_data_1
+  input  [15:0] tileA_data_2
+  input  [15:0] tileA_data_3
+  input  [15:0] tileB_data_0
+  input  [15:0] tileB_data_1
+  input  [15:0] tileB_data_2
+  input  [15:0] tileB_data_3
+
+  // Data Outputs (valid ONLY when o_valid=1)
+  output reg [15:0] tileO_data_0
+  output reg [15:0] tileO_data_1
+  output reg [15:0] tileO_data_2
+  output reg [15:0] tileO_data_3
+  output reg [15:0] tileO_data_4
+  output reg [15:0] tileO_data_5
+  output reg [15:0] tileO_data_6
+  output reg [15:0] tileO_data_7
+  output reg [15:0] tileO_data_8
+  output reg [15:0] tileO_data_9
+  output reg [15:0] tileO_data_10
+  output reg [15:0] tileO_data_11
+  output reg [15:0] tileO_data_12
+  output reg [15:0] tileO_data_13
+  output reg [15:0] tileO_data_14
+  output reg [15:0] tileO_data_15
+
+  // Completion Pulse
+  output reg o_valid   // one-cycle pulse; in this cycle ALL tileO_data_* are valid and stable
+
+OUTPUT MAPPING
+  - Row-major: tileO_data_(4*r + c) corresponds to element at row r, column c (r,c ∈ {0..3}).
+
+TIMING CONTRACT
+  LOAD PHASE
+    - Provide ONE tile using EXACTLY FOUR CONSECUTIVE cycles with tile_en=1.
+    - On each of those four posedges, sample ALL eight inputs (tileA_data_* and tileB_data_*).
+
+  OUTPUT VALIDITY
+    - o_valid is ONE clock wide.
+    - ALL tileO_data_* are valid and stable ONLY in the cycle where o_valid=1.
+    - Outside that cycle, tileO_data_* may be don't-care.
+
+CRITICAL RULE AFTER COMPLETION
+  - The cycle IMMEDIATELY AFTER o_valid assert tile_en=1.
+  - tile_en will be 1 for four consecutive cycles 
+
+INTERFACE ASSUMPTIONS
+  - No other ready/valid or back-pressure signals exist.
+  - Inputs during rst=1 are ignored; outputs and o_valid have no meaning during rst=1.
+  - Internal implementation is unconstrained; only this I/O and timing contract is verified.

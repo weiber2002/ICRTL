@@ -1,0 +1,904 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2025  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.57+72 (git sha1 fa02d71f6, g++ 11.4.0-1ubuntu1~22.04 -fPIC -O3)
+
+-- Running command `
+  read_verilog ./ref_solution/initial_island_1.sv;
+  hierarchy -top CONV;
+  proc; opt; fsm; opt; memory; opt;
+  techmap; opt;
+  dfflibmap -liberty /home/weiber/project/NanGate45-Synopsys-Enablement/NanGate45/lib/NangateOpenCellLibrary_typical.lib;
+  abc       -liberty /home/weiber/project/NanGate45-Synopsys-Enablement/NanGate45/lib/NangateOpenCellLibrary_typical.lib;
+  stat      -liberty /home/weiber/project/NanGate45-Synopsys-Enablement/NanGate45/lib/NangateOpenCellLibrary_typical.lib;
+  write_verilog -noattr mapped.v
+' --
+
+1. Executing Verilog-2005 frontend: ./ref_solution/initial_island_1.sv
+Parsing Verilog input from `./ref_solution/initial_island_1.sv' to AST representation.
+Generating RTLIL representation for module `\CONV'.
+Successfully finished Verilog frontend.
+
+2. Executing HIERARCHY pass (managing design hierarchy).
+
+2.1. Analyzing design hierarchy..
+Top module:  \CONV
+
+2.2. Analyzing design hierarchy..
+Top module:  \CONV
+Removed 0 unused modules.
+
+3. Executing PROC pass (convert processes to netlists).
+
+3.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Removed 1 dead cases from process $proc$./ref_solution/initial_island_1.sv:263$111 in module CONV.
+Marked 1 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:263$111 in module CONV.
+Marked 1 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:258$110 in module CONV.
+Marked 4 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:247$106 in module CONV.
+Marked 2 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:238$104 in module CONV.
+Marked 2 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:229$101 in module CONV.
+Marked 1 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:221$100 in module CONV.
+Marked 2 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:212$96 in module CONV.
+Marked 3 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:200$89 in module CONV.
+Marked 2 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:189$84 in module CONV.
+Marked 1 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:174$78 in module CONV.
+Marked 2 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:164$76 in module CONV.
+Marked 3 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:154$73 in module CONV.
+Marked 3 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:142$67 in module CONV.
+Marked 1 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:125$33 in module CONV.
+Marked 1 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:101$31 in module CONV.
+Marked 1 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:77$23 in module CONV.
+Marked 1 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:65$17 in module CONV.
+Marked 2 switch rules as full_case in process $proc$./ref_solution/initial_island_1.sv:44$1 in module CONV.
+Removed a total of 1 dead cases.
+
+3.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 6 redundant assignments.
+Promoted 2 assignments to connections.
+
+3.4. Executing PROC_INIT pass (extract init attributes).
+
+3.5. Executing PROC_ARST pass (detect async resets in processes).
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:258$110'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:247$106'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:238$104'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:229$101'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:221$100'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:212$96'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:200$89'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:189$84'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:174$78'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:164$76'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:154$73'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:142$67'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:125$33'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:77$23'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:65$17'.
+Found async reset \reset in `\CONV.$proc$./ref_solution/initial_island_1.sv:44$1'.
+
+3.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 1 switch.
+<suppressed ~29 debug messages>
+
+3.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:263$111'.
+     1/1: $1\nx_state[2:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:258$110'.
+     1/1: $0\cur_state[2:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:247$106'.
+     1/1: $0\csel[2:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:238$104'.
+     1/1: $0\busy[0:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:229$101'.
+     1/1: $0\counter_layer1[2:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:221$100'.
+     1/1: $0\counter_data[3:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:212$96'.
+     1/1: $0\counter_addr[3:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:200$89'.
+     1/1: $0\cdata_wr[19:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:189$84'.
+     1/1: $0\caddr_wr[11:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:174$78'.
+     1/1: $0\caddr_rd[11:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:164$76'.
+     1/1: $0\crd[0:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:154$73'.
+     1/1: $0\cwr[0:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:142$67'.
+     1/1: $0\data_conv_sum[39:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:125$33'.
+     1/1: $0\idata_tmp[19:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:101$31'.
+     1/1: $1\Kernel[19:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:77$23'.
+     1/2: $0\L1_y[5:0]
+     2/2: $0\L1_x[5:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:65$17'.
+     1/2: $0\x[5:0]
+     2/2: $0\y[5:0]
+Creating decoders for process `\CONV.$proc$./ref_solution/initial_island_1.sv:44$1'.
+     1/1: $0\iaddr[11:0]
+
+3.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `\CONV.\nx_state' from process `\CONV.$proc$./ref_solution/initial_island_1.sv:263$111'.
+No latch inferred for signal `\CONV.\Kernel' from process `\CONV.$proc$./ref_solution/initial_island_1.sv:101$31'.
+
+3.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\CONV.\cur_state' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:258$110'.
+  created $adff cell `$procdff$234' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\csel' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:247$106'.
+  created $adff cell `$procdff$237' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\busy' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:238$104'.
+  created $adff cell `$procdff$240' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\counter_layer1' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:229$101'.
+  created $adff cell `$procdff$243' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\counter_data' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:221$100'.
+  created $adff cell `$procdff$246' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\counter_addr' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:212$96'.
+  created $adff cell `$procdff$249' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\cdata_wr' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:200$89'.
+  created $adff cell `$procdff$252' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\caddr_wr' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:189$84'.
+  created $adff cell `$procdff$255' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\caddr_rd' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:174$78'.
+  created $adff cell `$procdff$258' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\crd' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:164$76'.
+  created $adff cell `$procdff$261' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\cwr' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:154$73'.
+  created $adff cell `$procdff$264' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\data_conv_sum' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:142$67'.
+  created $adff cell `$procdff$267' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\idata_tmp' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:125$33'.
+  created $adff cell `$procdff$270' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\L1_x' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:77$23'.
+  created $adff cell `$procdff$273' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\L1_y' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:77$23'.
+  created $adff cell `$procdff$276' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\y' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:65$17'.
+  created $adff cell `$procdff$279' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\x' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:65$17'.
+  created $adff cell `$procdff$282' with positive edge clock and positive level reset.
+Creating register for signal `\CONV.\iaddr' using process `\CONV.$proc$./ref_solution/initial_island_1.sv:44$1'.
+  created $adff cell `$procdff$285' with positive edge clock and positive level reset.
+
+3.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+3.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 1 empty switch in `\CONV.$proc$./ref_solution/initial_island_1.sv:263$111'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:263$111'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:258$110'.
+Found and cleaned up 3 empty switches in `\CONV.$proc$./ref_solution/initial_island_1.sv:247$106'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:247$106'.
+Found and cleaned up 2 empty switches in `\CONV.$proc$./ref_solution/initial_island_1.sv:238$104'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:238$104'.
+Found and cleaned up 1 empty switch in `\CONV.$proc$./ref_solution/initial_island_1.sv:229$101'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:229$101'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:221$100'.
+Found and cleaned up 2 empty switches in `\CONV.$proc$./ref_solution/initial_island_1.sv:212$96'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:212$96'.
+Found and cleaned up 3 empty switches in `\CONV.$proc$./ref_solution/initial_island_1.sv:200$89'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:200$89'.
+Found and cleaned up 2 empty switches in `\CONV.$proc$./ref_solution/initial_island_1.sv:189$84'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:189$84'.
+Found and cleaned up 2 empty switches in `\CONV.$proc$./ref_solution/initial_island_1.sv:174$78'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:174$78'.
+Found and cleaned up 1 empty switch in `\CONV.$proc$./ref_solution/initial_island_1.sv:164$76'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:164$76'.
+Found and cleaned up 2 empty switches in `\CONV.$proc$./ref_solution/initial_island_1.sv:154$73'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:154$73'.
+Found and cleaned up 3 empty switches in `\CONV.$proc$./ref_solution/initial_island_1.sv:142$67'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:142$67'.
+Found and cleaned up 2 empty switches in `\CONV.$proc$./ref_solution/initial_island_1.sv:125$33'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:125$33'.
+Found and cleaned up 1 empty switch in `\CONV.$proc$./ref_solution/initial_island_1.sv:101$31'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:101$31'.
+Found and cleaned up 1 empty switch in `\CONV.$proc$./ref_solution/initial_island_1.sv:77$23'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:77$23'.
+Found and cleaned up 1 empty switch in `\CONV.$proc$./ref_solution/initial_island_1.sv:65$17'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:65$17'.
+Found and cleaned up 3 empty switches in `\CONV.$proc$./ref_solution/initial_island_1.sv:44$1'.
+Removing empty process `CONV.$proc$./ref_solution/initial_island_1.sv:44$1'.
+Cleaned up 30 empty switches.
+
+3.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+<suppressed ~33 debug messages>
+
+4. Executing OPT pass (performing simple optimizations).
+
+4.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+
+4.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+<suppressed ~156 debug messages>
+Removed a total of 52 cells.
+
+4.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \CONV..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~66 debug messages>
+
+4.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \CONV.
+Performed a total of 0 changes.
+
+4.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+Removed a total of 0 cells.
+
+4.6. Executing OPT_DFF pass (perform DFF optimizations).
+Adding EN signal on $procdff$285 ($adff) from module CONV (D = $procmux$230_Y, Q = \iaddr).
+Adding EN signal on $procdff$267 ($adff) from module CONV (D = $procmux$192_Y, Q = \data_conv_sum).
+Adding EN signal on $procdff$282 ($adff) from module CONV (D = $add$./ref_solution/initial_island_1.sv:70$19_Y, Q = \x).
+Adding EN signal on $procdff$240 ($adff) from module CONV (D = $procmux$149_Y, Q = \busy).
+Adding EN signal on $procdff$279 ($adff) from module CONV (D = $add$./ref_solution/initial_island_1.sv:70$21_Y, Q = \y).
+Adding EN signal on $procdff$270 ($adff) from module CONV (D = $procmux$196_Y, Q = \idata_tmp).
+Adding EN signal on $procdff$249 ($adff) from module CONV (D = $procmux$157_Y, Q = \counter_addr).
+Adding EN signal on $procdff$276 ($adff) from module CONV (D = $add$./ref_solution/initial_island_1.sv:82$29_Y, Q = \L1_y).
+Adding EN signal on $procdff$252 ($adff) from module CONV (D = $procmux$165_Y, Q = \cdata_wr).
+Adding EN signal on $procdff$255 ($adff) from module CONV (D = $procmux$170_Y, Q = \caddr_wr).
+Adding EN signal on $procdff$273 ($adff) from module CONV (D = $ternary$./ref_solution/initial_island_1.sv:82$27_Y, Q = \L1_x).
+Adding EN signal on $procdff$258 ($adff) from module CONV (D = $procmux$172_Y, Q = \caddr_rd).
+
+4.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+Removed 9 unused cells and 133 unused wires.
+<suppressed ~11 debug messages>
+
+4.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+<suppressed ~8 debug messages>
+
+4.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+4.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \CONV..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~54 debug messages>
+
+4.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \CONV.
+Performed a total of 0 changes.
+
+4.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+4.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+Removed 0 unused cells and 1 unused wires.
+<suppressed ~1 debug messages>
+
+4.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+
+4.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+4.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \CONV..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~54 debug messages>
+
+4.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \CONV.
+Performed a total of 0 changes.
+
+4.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+Removed a total of 0 cells.
+
+4.20. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+
+4.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+
+4.23. Finished fast OPT passes. (There is nothing left to do.)
+
+5. Executing FSM pass (extract and optimize FSM).
+
+5.1. Executing FSM_DETECT pass (finding FSMs in design).
+Not marking CONV.csel as FSM state register:
+    Register is connected to module port.
+    Users of register don't seem to benefit from recoding.
+Not marking CONV.cur_state as FSM state register:
+    Circuit seems to be self-resetting.
+
+5.2. Executing FSM_EXTRACT pass (extracting FSM from design).
+
+5.3. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+5.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+
+5.5. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+5.6. Executing FSM_RECODE pass (re-assigning FSM state encoding).
+
+5.7. Executing FSM_INFO pass (dumping all available information on FSM cells).
+
+5.8. Executing FSM_MAP pass (mapping FSMs to basic logic).
+
+6. Executing OPT pass (performing simple optimizations).
+
+6.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+
+6.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+Removed a total of 0 cells.
+
+6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \CONV..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~54 debug messages>
+
+6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \CONV.
+Performed a total of 0 changes.
+
+6.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+Removed a total of 0 cells.
+
+6.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+
+6.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+
+6.9. Finished fast OPT passes. (There is nothing left to do.)
+
+7. Executing MEMORY pass.
+
+7.1. Executing OPT_MEM pass (optimize memories).
+Performed a total of 0 transformations.
+
+7.2. Executing OPT_MEM_PRIORITY pass (removing unnecessary memory write priority relations).
+Performed a total of 0 transformations.
+
+7.3. Executing OPT_MEM_FEEDBACK pass (finding memory read-to-write feedback paths).
+
+7.4. Executing MEMORY_BMUX2ROM pass (converting muxes to ROMs).
+
+7.5. Executing MEMORY_DFF pass (merging $dff cells to $memrd).
+Checking read port `$auto$proc_rom.cc:155:do_switch$125'[0] in module `\CONV': no output FF found.
+Checking read port address `$auto$proc_rom.cc:155:do_switch$125'[0] in module `\CONV': address FF has async set and/or reset, not supported.
+
+7.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+
+7.7. Executing MEMORY_SHARE pass (consolidating $memrd/$memwr cells).
+
+7.8. Executing OPT_MEM_WIDEN pass (optimize memories where all ports are wide).
+Performed a total of 0 transformations.
+
+7.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+
+7.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+7.11. Executing MEMORY_MAP pass (converting memories to logic and flip-flops).
+Mapping memory $auto$proc_rom.cc:155:do_switch$125 in module \CONV:
+  created 16 $dff cells and 0 static cells of width 20.
+  read interface: 0 $dff and 15 $mux cells.
+  write interface: 0 write mux blocks.
+
+8. Executing OPT pass (performing simple optimizations).
+
+8.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+<suppressed ~4 debug messages>
+
+8.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+Removed a total of 0 cells.
+
+8.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \CONV..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~66 debug messages>
+
+8.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \CONV.
+Performed a total of 0 changes.
+
+8.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+Removed a total of 0 cells.
+
+8.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+8.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+Removed 0 unused cells and 20 unused wires.
+<suppressed ~1 debug messages>
+
+8.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+
+8.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+8.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \CONV..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~66 debug messages>
+
+8.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \CONV.
+Performed a total of 0 changes.
+
+8.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+Removed a total of 0 cells.
+
+8.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+8.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+
+8.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+
+8.16. Finished fast OPT passes. (There is nothing left to do.)
+
+9. Executing TECHMAP pass (map to technology primitives).
+
+9.1. Executing Verilog-2005 frontend: /usr/local/bin/../share/yosys/techmap.v
+Parsing Verilog input from `/usr/local/bin/../share/yosys/techmap.v' to AST representation.
+Generating RTLIL representation for module `\_90_simplemap_bool_ops'.
+Generating RTLIL representation for module `\_90_simplemap_reduce_ops'.
+Generating RTLIL representation for module `\_90_simplemap_logic_ops'.
+Generating RTLIL representation for module `\_90_simplemap_compare_ops'.
+Generating RTLIL representation for module `\_90_simplemap_various'.
+Generating RTLIL representation for module `\_90_simplemap_registers'.
+Generating RTLIL representation for module `\_90_shift_ops_shr_shl_sshl_sshr'.
+Generating RTLIL representation for module `\_90_shift_shiftx'.
+Generating RTLIL representation for module `\_90_fa'.
+Generating RTLIL representation for module `\_90_lcu_brent_kung'.
+Generating RTLIL representation for module `\_90_alu'.
+Generating RTLIL representation for module `\_90_macc'.
+Generating RTLIL representation for module `\_90_alumacc'.
+Generating RTLIL representation for module `\$__div_mod_u'.
+Generating RTLIL representation for module `\$__div_mod_trunc'.
+Generating RTLIL representation for module `\_90_div'.
+Generating RTLIL representation for module `\_90_mod'.
+Generating RTLIL representation for module `\$__div_mod_floor'.
+Generating RTLIL representation for module `\_90_divfloor'.
+Generating RTLIL representation for module `\_90_modfloor'.
+Generating RTLIL representation for module `\_90_pow'.
+Generating RTLIL representation for module `\_90_pmux'.
+Generating RTLIL representation for module `\_90_demux'.
+Generating RTLIL representation for module `\_90_lut'.
+Successfully finished Verilog frontend.
+
+9.2. Continuing TECHMAP pass.
+Using extmapper simplemap for cells of type $adffe.
+Using extmapper simplemap for cells of type $reduce_bool.
+Using extmapper simplemap for cells of type $ne.
+Running "alumacc" on wrapper $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$sub:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47.
+Using extmapper simplemap for cells of type $reduce_and.
+Running "alumacc" on wrapper $extern:wrap:$add:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$add:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$add:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=6:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47.
+Using extmapper simplemap for cells of type $mux.
+Using extmapper simplemap for cells of type $eq.
+Running "alumacc" on wrapper $extern:wrap:$mul:A_SIGNED=1:A_WIDTH=20:B_SIGNED=1:B_WIDTH=20:Y_WIDTH=40:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$mul:A_SIGNED=1:A_WIDTH=20:B_SIGNED=1:B_WIDTH=20:Y_WIDTH=40:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$mul:A_SIGNED=1:A_WIDTH=20:B_SIGNED=1:B_WIDTH=20:Y_WIDTH=40:394426c56d1a028ba8fdd5469b163e04011def47.
+Using extmapper simplemap for cells of type $logic_or.
+Running "alumacc" on wrapper $extern:wrap:$add:A_SIGNED=1:A_WIDTH=40:B_SIGNED=1:B_WIDTH=40:Y_WIDTH=40:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$add:A_SIGNED=1:A_WIDTH=40:B_SIGNED=1:B_WIDTH=40:Y_WIDTH=40:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$add:A_SIGNED=1:A_WIDTH=40:B_SIGNED=1:B_WIDTH=40:Y_WIDTH=40:394426c56d1a028ba8fdd5469b163e04011def47.
+Running "alumacc" on wrapper $extern:wrap:$add:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=1:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$add:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=1:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$add:A_SIGNED=0:A_WIDTH=6:B_SIGNED=0:B_WIDTH=1:Y_WIDTH=6:394426c56d1a028ba8fdd5469b163e04011def47.
+Running "alumacc" on wrapper $extern:wrap:$add:A_SIGNED=0:A_WIDTH=20:B_SIGNED=0:B_WIDTH=20:Y_WIDTH=20:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$add:A_SIGNED=0:A_WIDTH=20:B_SIGNED=0:B_WIDTH=20:Y_WIDTH=20:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$add:A_SIGNED=0:A_WIDTH=20:B_SIGNED=0:B_WIDTH=20:Y_WIDTH=20:394426c56d1a028ba8fdd5469b163e04011def47.
+Running "alumacc" on wrapper $extern:wrap:$gt:A_SIGNED=0:A_WIDTH=20:B_SIGNED=0:B_WIDTH=20:Y_WIDTH=1:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$gt:A_SIGNED=0:A_WIDTH=20:B_SIGNED=0:B_WIDTH=20:Y_WIDTH=1:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$gt:A_SIGNED=0:A_WIDTH=20:B_SIGNED=0:B_WIDTH=20:Y_WIDTH=1:394426c56d1a028ba8fdd5469b163e04011def47.
+Running "alumacc" on wrapper $extern:wrap:$add:A_SIGNED=0:A_WIDTH=4:B_SIGNED=0:B_WIDTH=4:Y_WIDTH=4:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$add:A_SIGNED=0:A_WIDTH=4:B_SIGNED=0:B_WIDTH=4:Y_WIDTH=4:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$add:A_SIGNED=0:A_WIDTH=4:B_SIGNED=0:B_WIDTH=4:Y_WIDTH=4:394426c56d1a028ba8fdd5469b163e04011def47.
+Running "alumacc" on wrapper $extern:wrap:$add:A_SIGNED=0:A_WIDTH=3:B_SIGNED=0:B_WIDTH=3:Y_WIDTH=3:394426c56d1a028ba8fdd5469b163e04011def47.
+Using template $extern:wrap:$add:A_SIGNED=0:A_WIDTH=3:B_SIGNED=0:B_WIDTH=3:Y_WIDTH=3:394426c56d1a028ba8fdd5469b163e04011def47 for cells of type $extern:wrap:$add:A_SIGNED=0:A_WIDTH=3:B_SIGNED=0:B_WIDTH=3:Y_WIDTH=3:394426c56d1a028ba8fdd5469b163e04011def47.
+Using extmapper simplemap for cells of type $logic_not.
+Using extmapper simplemap for cells of type $logic_and.
+Using template $paramod$e1315d5acb461a412426e33a80ee551cb676987f\_90_pmux for cells of type $pmux.
+Using template $paramod$dc24062c3fd854a070e0ecdecefbe7ab84bd9f07\_90_pmux for cells of type $pmux.
+Using template $paramod$c45300d0b528ed9fbe0308117b30bcb369afbaff\_90_pmux for cells of type $pmux.
+Using template $paramod$a93995b8b533c9c51271ffe70384f459e79c5d76\_90_pmux for cells of type $pmux.
+Using extmapper simplemap for cells of type $adff.
+Using template $paramod$00298f3f8094950cb9a5ff2fda48d0d8bde8806c\_90_alu for cells of type $alu.
+Using extmapper maccmap for cells of type $macc_v2.
+  add \idata_tmp * \Kernel (20x20 bits, signed)
+Using template $paramod$71c9f7f7b786b0a4a2cee4ece81b6578d46b2b84\_90_alu for cells of type $alu.
+Using template $paramod$32efbfac1c4dc57230cf86180788fdfd12e3b511\_90_alu for cells of type $alu.
+Using template $paramod$6fc37af1c109ae54e8aed83fcd995c12d378ce93\_90_alu for cells of type $alu.
+Using extmapper simplemap for cells of type $or.
+Using extmapper simplemap for cells of type $not.
+Using template $paramod$740b056ede97228d3eae64ea2fdc81f0a33e0fe7\_90_alu for cells of type $alu.
+Using template $paramod$78e969f2586efcf3a5b0b0440bcca0db83d5cca2\_90_alu for cells of type $alu.
+Using extmapper simplemap for cells of type $reduce_or.
+Using extmapper simplemap for cells of type $and.
+Using extmapper simplemap for cells of type $xor.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000110 for cells of type $lcu.
+Using extmapper simplemap for cells of type $pos.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000101000 for cells of type $fa.
+Using template $paramod$445c63d4194be6438b67f4f941870a6ab959ba80\_90_alu for cells of type $alu.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000101000 for cells of type $lcu.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000010100 for cells of type $lcu.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000100 for cells of type $lcu.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000011 for cells of type $lcu.
+No more expansions possible.
+<suppressed ~2397 debug messages>
+
+10. Executing OPT pass (performing simple optimizations).
+
+10.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+<suppressed ~2856 debug messages>
+
+10.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+<suppressed ~3735 debug messages>
+Removed a total of 1245 cells.
+
+10.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \CONV..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+10.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \CONV.
+Performed a total of 0 changes.
+
+10.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+Removed a total of 0 cells.
+
+10.6. Executing OPT_DFF pass (perform DFF optimizations).
+Adding EN signal on $auto$ff.cc:266:slice$1955 ($_DFFE_PP0N_) from module CONV (D = $ternary$./ref_solution/initial_island_1.sv:82$27_Y [0], Q = \L1_x [0]).
+Adding EN signal on $auto$ff.cc:266:slice$2086 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [0], Q = \data_conv_sum [0]).
+Adding EN signal on $auto$ff.cc:266:slice$2087 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [1], Q = \data_conv_sum [1]).
+Adding EN signal on $auto$ff.cc:266:slice$2088 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [2], Q = \data_conv_sum [2]).
+Adding EN signal on $auto$ff.cc:266:slice$2089 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [3], Q = \data_conv_sum [3]).
+Adding EN signal on $auto$ff.cc:266:slice$2090 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [4], Q = \data_conv_sum [4]).
+Adding EN signal on $auto$ff.cc:266:slice$2091 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [5], Q = \data_conv_sum [5]).
+Adding EN signal on $auto$ff.cc:266:slice$2092 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [6], Q = \data_conv_sum [6]).
+Adding EN signal on $auto$ff.cc:266:slice$2093 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [7], Q = \data_conv_sum [7]).
+Adding EN signal on $auto$ff.cc:266:slice$2094 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [8], Q = \data_conv_sum [8]).
+Adding EN signal on $auto$ff.cc:266:slice$2095 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [9], Q = \data_conv_sum [9]).
+Adding EN signal on $auto$ff.cc:266:slice$2096 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [10], Q = \data_conv_sum [10]).
+Adding EN signal on $auto$ff.cc:266:slice$2097 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [11], Q = \data_conv_sum [11]).
+Adding EN signal on $auto$ff.cc:266:slice$2098 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [12], Q = \data_conv_sum [12]).
+Adding EN signal on $auto$ff.cc:266:slice$2099 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [13], Q = \data_conv_sum [13]).
+Adding EN signal on $auto$ff.cc:266:slice$2100 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [14], Q = \data_conv_sum [14]).
+Adding EN signal on $auto$ff.cc:266:slice$2101 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [15], Q = \data_conv_sum [15]).
+Adding EN signal on $auto$ff.cc:266:slice$2102 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [16], Q = \data_conv_sum [16]).
+Adding EN signal on $auto$ff.cc:266:slice$2103 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [17], Q = \data_conv_sum [17]).
+Adding EN signal on $auto$ff.cc:266:slice$2104 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [18], Q = \data_conv_sum [18]).
+Adding EN signal on $auto$ff.cc:266:slice$2105 ($_DFFE_PP0N_) from module CONV (D = $procmux$192_Y [19], Q = \data_conv_sum [19]).
+Setting constant 0-bit at position 0 on $auto$ff.cc:266:slice$1903 ($_DFF_PP0_) from module CONV.
+
+10.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+Removed 201 unused cells and 1455 unused wires.
+<suppressed ~202 debug messages>
+
+10.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+<suppressed ~42 debug messages>
+
+10.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+10.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \CONV..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+10.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \CONV.
+Performed a total of 0 changes.
+
+10.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+<suppressed ~243 debug messages>
+Removed a total of 81 cells.
+
+10.13. Executing OPT_DFF pass (perform DFF optimizations).
+Handling D = Q on $auto$ff.cc:266:slice$1917 ($_DFFE_PP0P_) from module CONV (removing D path).
+Setting constant 0-bit at position 0 on $auto$ff.cc:266:slice$1917 ($_DLATCH_P_) from module CONV.
+
+10.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+Removed 0 unused cells and 102 unused wires.
+<suppressed ~1 debug messages>
+
+10.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+<suppressed ~17 debug messages>
+
+10.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+10.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \CONV..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+10.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \CONV.
+Performed a total of 0 changes.
+
+10.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+10.20. Executing OPT_DFF pass (perform DFF optimizations).
+
+10.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+Removed 0 unused cells and 2 unused wires.
+<suppressed ~1 debug messages>
+
+10.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+
+10.23. Rerunning OPT passes. (Maybe there is more to do..)
+
+10.24. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \CONV..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+10.25. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \CONV.
+Performed a total of 0 changes.
+
+10.26. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\CONV'.
+Removed a total of 0 cells.
+
+10.27. Executing OPT_DFF pass (perform DFF optimizations).
+
+10.28. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \CONV..
+
+10.29. Executing OPT_EXPR pass (perform const folding).
+Optimizing module CONV.
+
+10.30. Finished fast OPT passes. (There is nothing left to do.)
+
+11. Executing DFFLIBMAP pass (mapping DFF cells to sequential cells from liberty file).
+  cell DFF_X1 (noninv, pins=4, area=4.52) is a direct match for cell type $_DFF_P_.
+  cell DFFR_X1 (noninv, pins=5, area=5.32) is a direct match for cell type $_DFF_PN0_.
+  cell DFFS_X1 (noninv, pins=5, area=5.32) is a direct match for cell type $_DFF_PN1_.
+  cell DFFRS_X1 (noninv, pins=6, area=6.38) is a direct match for cell type $_DFFSR_PNN_.
+  final dff cell mappings:
+    unmapped dff cell: $_DFF_N_
+    \DFF_X1 _DFF_P_ (.CK( C), .D( D), .Q( Q), .QN(~Q));
+    unmapped dff cell: $_DFF_NN0_
+    unmapped dff cell: $_DFF_NN1_
+    unmapped dff cell: $_DFF_NP0_
+    unmapped dff cell: $_DFF_NP1_
+    \DFFR_X1 _DFF_PN0_ (.CK( C), .D( D), .Q( Q), .QN(~Q), .RN( R));
+    \DFFS_X1 _DFF_PN1_ (.CK( C), .D( D), .Q( Q), .QN(~Q), .SN( R));
+    unmapped dff cell: $_DFF_PP0_
+    unmapped dff cell: $_DFF_PP1_
+    unmapped dff cell: $_DFFE_NN_
+    unmapped dff cell: $_DFFE_NP_
+    unmapped dff cell: $_DFFE_PN_
+    unmapped dff cell: $_DFFE_PP_
+    unmapped dff cell: $_DFFSR_NNN_
+    unmapped dff cell: $_DFFSR_NNP_
+    unmapped dff cell: $_DFFSR_NPN_
+    unmapped dff cell: $_DFFSR_NPP_
+    \DFFRS_X1 _DFFSR_PNN_ (.CK( C), .D( D), .Q( Q), .QN(~Q), .RN( R), .SN( S));
+    unmapped dff cell: $_DFFSR_PNP_
+    unmapped dff cell: $_DFFSR_PPN_
+    unmapped dff cell: $_DFFSR_PPP_
+
+11.1. Executing DFFLEGALIZE pass (convert FFs to types supported by the target).
+<suppressed ~8 debug messages>
+Mapping DFF cells in module `\CONV':
+  mapped 158 $_DFF_PN0_ cells to \DFFR_X1 cells.
+
+12. Executing ABC pass (technology mapping using ABC).
+
+12.1. Extracting gate netlist of module `\CONV' to `<abc-temp-dir>/input.blif'..
+Replacing 133 occurrences of constant undef bits with constant zero bits
+Extracted 4999 gates and 5276 wires to a netlist network with 274 inputs and 312 outputs.
+
+12.1.1. Executing ABC.
+Running ABC command: "<yosys-exe-dir>/yosys-abc" -s -f <abc-temp-dir>/abc.script 2>&1
+ABC: ABC command line: "source <abc-temp-dir>/abc.script".
+ABC: 
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_lib -w /home/weiber/project/NanGate45-Synopsys-Enablement/NanGate45/lib/NangateOpenCellLibrary_typical.lib 
+ABC: Parsing finished successfully.  Parsing time =     0.03 sec
+ABC: Scl_LibertyReadGenlib() skipped cell "ANTENNA_X1" due to dont_use attribute.
+ABC: Scl_LibertyReadGenlib() skipped cell "CLKGATETST_X1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "CLKGATETST_X2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "CLKGATETST_X4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "CLKGATETST_X8" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "CLKGATE_X1" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "CLKGATE_X2" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "CLKGATE_X4" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped cell "CLKGATE_X8" without logic function.
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DFFRS_X1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DFFRS_X2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DFFR_X1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DFFR_X2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DFFS_X1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DFFS_X2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DFF_X1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DFF_X2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DLH_X1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DLH_X2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DLL_X1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "DLL_X2".
+ABC: Scl_LibertyReadGenlib() skipped cell "FILLCELL_X1" due to dont_use attribute.
+ABC: Scl_LibertyReadGenlib() skipped cell "TAPCELL_X1" due to dont_use attribute.
+ABC: Scl_LibertyReadGenlib() skipped cell "FILLCELL_X2" due to dont_use attribute.
+ABC: Scl_LibertyReadGenlib() skipped cell "FILLCELL_X4" due to dont_use attribute.
+ABC: Scl_LibertyReadGenlib() skipped cell "FILLCELL_X8" due to dont_use attribute.
+ABC: Scl_LibertyReadGenlib() skipped cell "FILLCELL_X16" due to dont_use attribute.
+ABC: Scl_LibertyReadGenlib() skipped cell "FILLCELL_X32" due to dont_use attribute.
+ABC: Scl_LibertyReadGenlib() skipped cell "LOGIC0_X1" due to dont_use attribute.
+ABC: Scl_LibertyReadGenlib() skipped cell "LOGIC1_X1" due to dont_use attribute.
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "SDFFRS_X1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "SDFFRS_X2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "SDFFR_X1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "SDFFR_X2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "SDFFS_X1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "SDFFS_X2".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "SDFF_X1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "SDFF_X2".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "TBUF_X1".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "TBUF_X2".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "TBUF_X4".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "TBUF_X8".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "TBUF_X16".
+ABC: Scl_LibertyReadGenlib() skipped three-state cell "TINV_X1".
+ABC: Scl_LibertyReadGenlib() skipped sequential cell "TLAT_X1".
+ABC: Library "NangateOpenCellLibrary" from "/home/weiber/project/NanGate45-Synopsys-Enablement/NanGate45/lib/NangateOpenCellLibrary_typical.lib" has 90 cells (45 skipped: 21 seq; 6 tri-state; 8 no func; 10 dont_use; 0 with 2 outputs; 0 with 3+ outputs).  Time =     0.04 sec
+ABC: Memory =   11.38 MB. Time =     0.04 sec
+ABC: Warning: Detected 2 multi-output cells (for example, "FA_X1").
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+
+12.1.2. Re-integrating ABC results.
+ABC RESULTS:           AND2_X1 cells:      151
+ABC RESULTS:           AND3_X1 cells:       88
+ABC RESULTS:           AND4_X1 cells:        5
+ABC RESULTS:         AOI211_X1 cells:       11
+ABC RESULTS:          AOI21_X1 cells:      278
+ABC RESULTS:         AOI221_X1 cells:       15
+ABC RESULTS:         AOI222_X1 cells:       13
+ABC RESULTS:          AOI22_X1 cells:       86
+ABC RESULTS:            BUF_X1 cells:        1
+ABC RESULTS:            INV_X1 cells:      395
+ABC RESULTS:           MUX2_X1 cells:       29
+ABC RESULTS:          NAND2_X1 cells:      609
+ABC RESULTS:          NAND3_X1 cells:      185
+ABC RESULTS:          NAND4_X1 cells:        8
+ABC RESULTS:           NOR2_X1 cells:      275
+ABC RESULTS:           NOR3_X1 cells:       91
+ABC RESULTS:           NOR4_X1 cells:       11
+ABC RESULTS:         OAI211_X1 cells:       27
+ABC RESULTS:          OAI21_X1 cells:      375
+ABC RESULTS:         OAI221_X1 cells:        8
+ABC RESULTS:          OAI22_X1 cells:       64
+ABC RESULTS:          OAI33_X1 cells:       11
+ABC RESULTS:            OR2_X1 cells:      132
+ABC RESULTS:            OR3_X1 cells:       88
+ABC RESULTS:            OR4_X1 cells:        4
+ABC RESULTS:          XNOR2_X1 cells:      445
+ABC RESULTS:           XOR2_X1 cells:      313
+ABC RESULTS:        internal signals:     4690
+ABC RESULTS:           input signals:      274
+ABC RESULTS:          output signals:      312
+Removing temp directory.
+
+13. Printing statistics.
+
+=== CONV ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     5331        - wires
+    12076        - wire bits
+       28        - public wires
+      326        - public wire bits
+       13        - ports
+      105        - port bits
+     3876 4.92E+03 cells
+      151  160.664   AND2_X1
+       88   117.04   AND3_X1
+        5     7.98   AND4_X1
+       11    14.63   AOI211_X1
+      278  295.792   AOI21_X1
+       15    23.94   AOI221_X1
+       13   27.664   AOI222_X1
+       86   114.38   AOI22_X1
+        1    0.798   BUF_X1
+      158   840.56   DFFR_X1
+      395   210.14   INV_X1
+       29   53.998   MUX2_X1
+      609  485.982   NAND2_X1
+      185   196.84   NAND3_X1
+        8    10.64   NAND4_X1
+      275   219.45   NOR2_X1
+       91   96.824   NOR3_X1
+       11    14.63   NOR4_X1
+       27    35.91   OAI211_X1
+      375      399   OAI21_X1
+        8   12.768   OAI221_X1
+       64    85.12   OAI22_X1
+       11   20.482   OAI33_X1
+      132  140.448   OR2_X1
+       88   117.04   OR3_X1
+        4    6.384   OR4_X1
+      445   710.22   XNOR2_X1
+      313  499.548   XOR2_X1
+
+   Chip area for module '\CONV': 4918.872000
+     of which used for sequential elements: 840.560000 (17.09%)
+
+14. Executing Verilog backend.
+
+14.1. Executing BMUXMAP pass.
+
+14.2. Executing DEMUXMAP pass.
+Dumping module `\CONV'.
+
+End of script. Logfile hash: 377a294bc5, CPU: user 0.49s system 0.02s, MEM: 45.77 MB peak
+Yosys 0.57+72 (git sha1 fa02d71f6, g++ 11.4.0-1ubuntu1~22.04 -fPIC -O3)
+Time spent: 45% 1x abc (0 sec), 12% 25x opt_expr (0 sec), ...

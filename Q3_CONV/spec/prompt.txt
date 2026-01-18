@@ -1,0 +1,64 @@
+TASK: Implement a synthesizable Verilog module "CONV" that follows ONLY the I/O, timing, addressing, numeric, and algorithmic contracts below (no internal architecture constraints). All ports are 1-D flattened (no multi-dimensional arrays on the port list).
+
+# 1) Goal & Scope
+- Read a 64×64 grayscale image from the testfixture via (iaddr/idata). Pixel data width is 20 bits (Q4.16).
+- Produce:
+  (1) Layer 0: zero-padding(1) → 3×3 convolution (Kernel 0) → +bias → ReLU ⇒ 64×64 result in Q4.16, written to L0_MEM0.
+  (2) Layer 1: 2×2 max-pooling, stride 2, over Layer-0 output ⇒ 32×32 result in Q4.16, written to L1_MEM0.
+
+# 2) Top-Level Ports (names, widths, meaning)
+- input        clk         // posedge-synchronous
+- input        reset       // Asynchronous, active-high
+- input        ready       // testfixture asserts when inputs are prepared; CONV may start only after seeing ready=1
+- output       busy        // set High once after seeing ready=1; set Low once when all required writes finish; exactly one rise and one fall per image
+- output [11:0] iaddr      // Address for input image (row-major, 0..4095)
+- input  [19:0] idata      // Input pixel at iaddr, Q4.16 (20-bit)
+- output        crd        // Result memory read enable (see timing)
+- input  [19:0] cdata_rd   // Read data from selected result memory (Q4.16)
+- output [11:0] caddr_rd   // Read address
+- output        cwr        // Result memory write enable (see timing)
+- output [19:0] cdata_wr   // Write data (Q4.16)
+- output [11:0] caddr_wr   // Write address
+- output [2:0]  csel       // Memory select: 3’b001=L0_MEM0, 3’b011=L1_MEM0
+
+# 3) Handshake & Global Timing
+(1) Start/End protocol
+    - After reset deasserts, testfixture sets ready=1 when inputs (image & constants) are ready.
+      On detecting ready=1, assert busy=1 (start).
+      When all mandated writes (L0 then L1) complete, deassert busy (end).
+      Exactly one rising and one falling edge of busy per image.
+(2) Image memory read timing (iaddr→idata)
+    - Drive iaddr on/after a posedge; the testfixture returns the addressed pixel on idata after the following negedge.
+      Keep iaddr stable until that negedge. (You may pipeline one address per cycle.)
+(3) Result memory timing (L0_MEM0 & L1_MEM0)
+    - READ: If crd=1 at a negedge, cdata_rd immediately reflects the word at caddr_rd (for selected csel).
+    - WRITE: If cwr=1 at a posedge, the testfixture writes cdata_wr to caddr_wr (for selected csel).
+    - SELECT: Use csel=3’b001 for L0_MEM0; use csel=3’b011 for L1_MEM0.
+
+# 4) Memories & Addressing
+- Input image: 64×64 = 4096 pixels, row-major (addr = y*64 + x). Data width 20 bits (Q4.16).
+- L0_MEM0: Layer-0 output, 64×64, row-major, 20-bit Q4.16. Access with csel=3’b001. Quantize per §5.
+- L1_MEM0: Layer-1 output, 32×32, row-major, 20-bit Q4.16. Access with csel=3’b011.
+
+# 5) Numeric Format & Quantization
+- All I/O and stored results are 20-bit Q4.16 two’s-complement (4 integer bits incl. sign + 16 fractional bits).
+- Round-to-nearest when writing to memories using the 17th fractional bit.
+
+# 6) Layer Algorithms
+6.1 Layer 0 — Zero-padding → 3×3 Convolution → +Bias → ReLU
+- Zero-padding: Pad the input image with 1-pixel zeros on all sides so that 3×3 stride-1 convolution preserves 64×64 size.
+- Convolution (stride 1):
+    S(x,y) = Σ_{i=0..2} Σ_{j=0..2} K[i,j] * I(x+i−1, y+j−1),
+  where I is the padded image (Q4.16) and K is Kernel 0 (Q4.16). After the sum, add bias, then ReLU: S ← max(S,0).
+- Kernel 0 (decimal, Q4.16 constants):
+    [[  0.426810,  0.573572,  0.658674 ],
+     [ -0.569037, -0.439696,  0.0625617],
+     [ -0.327755, -0.217964, -0.348290 ]]
+
+    =
+
+    [[ 0x0A89E, 0x092D5, 0x06D43],
+     [ 0x01004, 0xF8F71, 0xF6E54],
+     [ 0xFA6D7, 0xFC834, 0xFAC19]]
+- Bias: +0.07446326 (Q4.16 = 0x01310).
+- Write-out: Quantize to Q4.16 using §5, then write e

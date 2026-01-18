@@ -1,0 +1,39 @@
+{
+  "area": {
+    "top_module": {
+      "name": "CONV",
+      "chip_area": 4918.872,
+      "sequential_area": 840.56,
+      "sequential_percentage": 17.09
+    },
+    "all_modules": {
+      "CONV": {
+        "chip_area": 4918.872,
+        "sequential_area": 840.56,
+        "sequential_percentage": 17.09
+      }
+    },
+    "summary": {
+      "total_modules": 1,
+      "total_chip_area": 4918.872,
+      "total_sequential_area": 840.56,
+      "overall_sequential_percentage": 17.09
+    }
+  },
+  "timing": {
+    "slack": 7.26,
+    "status": "MET"
+  },
+  "performance": {
+    "cycles": 59398,
+    "error_rate": null,
+    "total_error": null,
+    "status": "PASS"
+  },
+  "power": {
+    "internal_power": 0.001884,
+    "switching_power": 0.001201,
+    "total_power": 0.003195,
+    "unit": "Watts"
+  }
+}

@@ -1,0 +1,49 @@
+
+**TASK:** Implement a synthesizable Verilog module **`JAM`** that finds the **minimum total assignment cost** and the **number of assignments** achieving it for **8 workers × 8 jobs** by **exhaustively enumerating all permutations** and reading costs from a synchronous 8×8 ROM via `(W,J)`. **Do not change any port names or widths.**
+
+### I/O (fixed; do not change)
+
+* `input  CLK` — posedge synchronous
+* `input  RST` — asynchronous active-high; clears state; **testbench holds RST High for \~2 cycles before deasserting**; no `Valid` while High
+* `output reg [2:0] W` — worker index 0..7
+* `output reg [2:0] J` — job index 0..7
+* `input  [6:0] Cost` — unsigned cost 0..100 from ROM
+* `output reg [3:0] MatchCount` — number of min-cost assignments (0..15)
+* `output reg [9:0] MinCost` — unsigned min total cost (≤1024)
+* `output reg Valid` — **1-cycle pulse** when `MinCost/MatchCount` are final
+
+### Cost ROM protocol
+
+* Apply `(W,J)` during cycle **t**; sample the corresponding `Cost` at the **next rising edge (t+1)** (synchronous read).
+* **Keep `W` and `J` stable throughout the cycle they are driven to meet setup/hold.**
+* Reads are **side-effect free**; the same entry may be read any number of times.
+
+### Required behavior
+
+1. Generate **all 8! permutations** of `[0..7]`. Treat a permutation **P** as the mapping `W=k → J=P[k]`.
+2. For each permutation, compute
+   `TotalCost = Σ_{k=0..7} Cost(W=k, J=P[k])` using the ROM.
+3. Track `MinCost` (minimum of all totals) and `MatchCount` (how many totals equal that minimum).
+4. When all permutations are processed, drive `MinCost` and `MatchCount`, and assert `Valid=1` for **exactly one** clock. The testbench terminates on the **next** cycle.
+
+### Next-permutation (reference method; any correct exhaustive method is OK)
+
+* **Pivot:** find rightmost `i` with `a[i] < a[i+1]`.
+* **Successor:** in the suffix, pick the smallest `a[j] > a[i]`.
+* **Swap + reverse:** swap `a[i], a[j]`, then reverse `a[i+1..end]`.
+* Start from `[0,1,2,3,4,5,6,7]` and iterate until all permutations are visited.
+
+### Ranges & types
+
+* `Cost`: 7-bit unsigned (0..100).
+* `MinCost`: 10-bit unsigned (≤1024).
+* `MatchCount`: 4-bit unsigned.
+* `W`, `J`: 3-bit unsigned (0..7).
+
+### Constraints
+
+* No pattern-specific shortcuts or precomputed answers; **must** truly enumerate and compute.
+* **Do not modify** port names or widths; keep timing and `Valid` protocol exactly as specified.
+* While `RST=1`, clear all state; begin operation only after deassertion.
+
+---

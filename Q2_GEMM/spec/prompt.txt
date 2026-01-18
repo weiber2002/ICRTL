@@ -1,0 +1,75 @@
+# LLM-Prompt Version (Same Content, Compact)
+
+**MODULE**: `systolic` — 4×4 Q1.15 systolic MAC array for GEMM tiles; integrates with `Top_control.sv` and passes `tb.sv`.
+
+**PORTS**
+
+* `clk` (in), `rst` (in), `tile_en` (in)
+* `tileA_data_0..3` (in, signed 16), `tileB_data_0..3` (in, signed 16) — Q1.15
+* `tileO_data_0..15` (out, signed 16) — Q1.15, row-major idx = 4\*r+c
+* `o_valid` (out, 1-cycle pulse per tile)
+
+**MATH & FIXED-POINT**
+
+* For r,c ∈ {0..3}: `C[r][c] = Σ_{k=0..3} A[r][k]*B[k][c]`
+* Inputs: Q1.15; Product: Q2.30; Accumulator: ≥36-bit signed
+* Output: `sat16(acc >>> 15)`; clamp to 0x7FFF/0x8000 on overflow
+
+**STATE MACHINE**
+
+* LOADING → COMPUTE → DONE → LOADING (repeat)
+* Per tile cycles: load **4** (contiguous) + compute **12** + done **1** = **17** total
+
+**LOADING (4 cycles with `tile_en=1`)**
+
+* On load beat L∈{0,1,2,3}, sample inputs and write:
+
+  * A: for c∈{0..3}, `tileA_r[8*L + c] = tileA_data_c`
+    (L=0→0..3, L=1→8..11, L=2→16..19, L=3→24..27)
+  * B: for c∈{0..3}, `tileB_r[8*c + L] = tileB_data_c`
+    (L=0→0,8,16,24; L=1→1,9,17,25; L=2→2,10,18,26; L=3→3,11,19,27)
+* Unwritten indices remain 0 (timing gaps)
+
+**COMPUTE (12 cycles)**
+
+* Propagate counter `t=0..11`; assert `PE_en=1` throughout.
+* For `t=0..6`:
+
+  * `A_in[r] = tileA_r[7*r + t]`
+  * `B_in[c] = tileB_r[7*c + t]`
+  * Each PE does `acc += a*b` (signed)
+* For `t=7..10`: drain phase (no new non-zero inputs; keep `PE_en=1`)
+* At `t=11`: final drain, then go DONE
+
+**DONE (1 cycle)**
+
+* Assert `PE_out=1`, `o_valid=1`
+* For each PE\[r]\[c], drive `tileO_data_(4*r+c) = sat16(acc >>> 15)`
+* Assert `PE_clear=1` to zero accumulators; next state LOADING
+
+**OUTPUT RULES**
+
+* `o_valid=1` exactly 1 cycle; all `tileO_data_*` stable in that cycle
+* Outside `o_valid`, outputs are don’t-care
+
+**RESET**
+
+* State=LOADING; counters/buffers/accumulators cleared; `o_valid=0`
+
+**USAGE CONTRACT**
+
+* `top` must assert `tile_en=1` for **4 consecutive cycles** per tile, with inputs stable each cycle
+* Illegal: non-contiguous loads, sampling outputs outside `o_valid`
+
+**SYSTEM NOTES**
+
+* `top` composes whole matrices: for `inst_m=4/8/16`, uses 1×1 / 2×2 / 4×4 tile grids; after `o_valid`, `top` scatters `tileO_data` into `matrixO1` and later serves `data_O` to `tb`
+* Per tile latency: **17 cycles**
+
+**IMPLEMENTATION HINTS**
+
+* Two 28×16b buffers for `tileA_r`, `tileB_r`
+* 4×4 PE mesh with local `next_a/next_b` handoff
+* Saturation: if `acc ≥ +2^30` → 0x7FFF; if `acc < −2^30` → 0x8000; else arithmetic shift right by 15
+
+---

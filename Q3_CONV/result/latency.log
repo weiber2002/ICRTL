@@ -1,0 +1,23 @@
+-----------------------------------------------------
+
+START!!! Simulation Start .....
+
+-----------------------------------------------------
+
+Layer 0 (Convolutional Output) with Kernel 0 is correct !
+Layer 1 (Max-pooling Output) with Kernel 0 is correct!
+ 
+Congratulations! Layer 0 data have been generated successfully! The result is PASS!!
+
+Congratulations! Layer 1 data have been generated successfully! The result is PASS!!
+
+-----------------------------------------------------
+
+-----------------------------------------------------------------
+it takes       59398 cycles to finish (without loading and comparing answer)
+-----------------------------------------------------------------
+------------------------------------------------
+----------------All tests PASS!-----------------
+------------total time: 59398 cycles-----------------
+------------------------------------------------
+./tb/tb.sv:237: $finish called at 59398000 (10ps)

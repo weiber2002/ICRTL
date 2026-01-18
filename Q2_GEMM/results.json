@@ -1,0 +1,44 @@
+{
+  "area": {
+    "top_module": {
+      "name": "systolic",
+      "chip_area": 50082.214,
+      "sequential_area": 8559.88,
+      "sequential_percentage": 17.09
+    },
+    "all_modules": {
+      "PE": {
+        "chip_area": 2725.17,
+        "sequential_area": 361.76,
+        "sequential_percentage": 13.27
+      },
+      "systolic": {
+        "chip_area": 50082.214,
+        "sequential_area": 8559.88,
+        "sequential_percentage": 17.09
+      }
+    },
+    "summary": {
+      "total_modules": 2,
+      "total_chip_area": 52807.384,
+      "total_sequential_area": 8921.64,
+      "overall_sequential_percentage": 16.89
+    }
+  },
+  "timing": {
+    "slack": 3.496,
+    "status": "MET"
+  },
+  "performance": {
+    "cycles": null,
+    "error_rate": 5.47,
+    "total_error": 42,
+    "status": "FAIL"
+  },
+  "power": {
+    "internal_power": 0.005782,
+    "switching_power": 0.003465,
+    "total_power": 0.0103,
+    "unit": "Watts"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "area": {
+    "top_module": {
+      "name": "LBP",
+      "chip_area": 878.598,
+      "sequential_area": 436.24,
+      "sequential_percentage": 49.65
+    },
+    "all_modules": {
+      "LBP": {
+        "chip_area": 878.598,
+        "sequential_area": 436.24,
+        "sequential_percentage": 49.65
+      }
+    },
+    "summary": {
+      "total_modules": 1,
+      "total_chip_area": 878.598,
+      "total_sequential_area": 436.24,
+      "overall_sequential_percentage": 49.65
+    }
+  },
+  "timing": {
+    "slack": 9.073,
+    "status": "MET"
+  },
+  "performance": {
+    "cycles": 158765,
+    "error_rate": null,
+    "total_error": null,
+    "status": "PASS"
+  },
+  "power": {
+    "internal_power": 5.768e-05,
+    "switching_power": 4.566e-06,
+    "total_power": 7.867e-05,
+    "unit": "Watts"
+  }
+}
