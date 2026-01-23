@@ -45,7 +45,6 @@ compute_time_ns = float(array_compute_cycles) * float(cycle_period) if array_com
 # 02_SYN
 
 print("Running Synthesis... (This may take a while)")
-# 這一行會等待 02_run 跑完才會往下走
 syn_log = run_cmd('bash -c "cd 02_SYN && source 02_run"', ROOT)
 
 print("Extracting synthesis area and violation...")
@@ -72,7 +71,7 @@ power_log = run_cmd('bash -c "cd 04_POWER && source 04_run "', ROOT)
 power_path = os.path.join(ROOT, '04_POWER', 'top.power')
 power_txt = open(power_path).read() if os.path.exists(power_path) else ''
 power_total = grep(r'Total Power\s*=\s*([\d\.]+)', power_txt)
-# 先計算兩個 PPA property
+
 try:
     ppa_total = float(area_total) * float(evaluation_time_ns) * float(power_total)
 except Exception:
@@ -83,14 +82,13 @@ except Exception:
     ppa_compute = ''
     
     
-# 獲取外部傳來的原始檔名，如果沒傳則顯示 'N/A'
 source_file_name = os.environ.get('TARGET_FILENAME', 'N/A')
 
 # write CSV
 csv_path = os.path.join(ROOT, 'evaluation.csv')
 header = [
     'Timestamp', 
-    'Source File',   # <--- 新增這一欄
+    'Source File', 
     'RTL_sim', 'Cycle Period', 
     'Area_seq(mm^2)', 'Area_comb(mm^2)', 'Area_total(mm^2)', 
     'Evaluation time(ns)', 'Array_compute time(ns)', 
@@ -99,7 +97,7 @@ header = [
 ]
 row = [
     datetime.now().strftime('%Y/%m/%d %H:%M'),
-    source_file_name, # <--- 填入檔名
+    source_file_name, 
     rtl_sim, 
     cycle_period, 
     area_seq, 
@@ -113,12 +111,12 @@ row = [
     ppa_compute
 ]
 
-# 注意：因為 Header 變了，建議你先刪除舊的 evaluation.csv，不然欄位會對不上
 write_header = not os.path.isfile(csv_path)
-with open(csv_path, 'a') as f: # 這裡保持修正後的寫法 (無 newline參數)
+with open(csv_path, 'a') as f:
     writer = csv.writer(f)
     if write_header:
         writer.writerow(header)
     writer.writerow(row)
+
 
 print("\n[DONE] Results recorded in evaluation.csv")
