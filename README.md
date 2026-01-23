@@ -28,9 +28,19 @@ ICRTL/
 └── VCS/              # Synopsys VCS / Design Compiler / PrimeTime Evaluation Flow
     ├── eval/         # Main evaluation scripts (auto_cycle.py, run_all.py)
     ├── 01_RTL/       # RTL Simulation setup
+        ├── 01_run
+        ├── rtl_01.f
     ├── 02_SYN/       # Synthesis setup
+        ├── 02_run
+        ├── syn.sdc
+        ├── syn.tcl    # Remind for the location of PDK or Foundary 
+        ├── filelist.v
     ├── 03_GATE/      # Gate-level Simulation setup
+        ├── 03_run
+        ├── gate_sim.f
     └── 04_POWER/     # Power Analysis setup
+        ├── 04_run
+        ├── pt_script.tcl  # Remind for the location of PDK or Foundary 
 ```
 
 Each `Q*` folder typically contains:
