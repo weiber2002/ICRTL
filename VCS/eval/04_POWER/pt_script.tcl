@@ -1,7 +1,7 @@
 
 set company "CIC"
 set designer "Student"
-set search_path       "./ /home/raid7_2/course/cvsd/CBDK_IC_Contest/CIC/SynopsysDC/db  $search_path"
+set search_path       "./ /CIC/SynopsysDC/db  $search_path"
 set target_library    "slow.db"
 set link_library      "* $target_library"
 
