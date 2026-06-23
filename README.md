@@ -2,6 +2,8 @@
 
 This repository contains a collection of industrial-level RTL design challenges selected from the National Taiwan Integrated Circuit Design Contest and handcrafted problems, complete with our reference implementations and specs. Each challenge targets specific algorithms or hardware modules used in industry. We present this collection as the ICRTL benchmark, designed to evaluate PPA optimization on complex problems — a level of difficulty previously unexplored in the application of LLMs to RTL design.
 
+Building this benchmark from scratch presented significant challenges, particularly in ensuring compatibility with open-source tools like Yosys without relying on proprietary IPs. We successfully overcame these obstacles thanks to the incredible efforts of our developers.
+
 ## Challenges Overview
 
 The repository is organized into problem-specific directories (`Q1` through `Q6`), each containing the problem specification, testbench, and reference solution foundation.
@@ -15,6 +17,7 @@ The repository is organized into problem-specific directories (`Q1` through `Q6`
 | **Q5** | **JAM** (Job Assignment Machine) | Implement an exhaustive search solver for the Job Assignment problem (finding min cost assignment). |
 | **Q6** | **DT** (Distance Transform) | Design an engine to compute the Distance Transform (chessboard distance) for binary images. |
 | **Q7** | **REF** (Optical Refraction) | Calculate the final position of vertically incident light after refracting through a curved glass surface onto its bottom plane. |  
+| **Q8** | **GEO** (Geofence) | Build a Geofence System | 
 
 ## Directory Structure
 
@@ -27,6 +30,7 @@ ICRTL/
 ├── Q5_JAM/           # Job Assignment Machine Challenge
 ├── Q6_DT/            # Distance Transform Challenge
 ├── Q7_REF/           # Optical Refraction Challenge
+├── Q8_GEO/           # Geofence Challenge
 └── VCS/              # Synopsys VCS / Design Compiler / PrimeTime Evaluation Flow
     ├── eval/         # Main evaluation scripts (auto_cycle.py, run_all.py)
     ├── 01_RTL/       # RTL Simulation setup
@@ -51,6 +55,7 @@ Each `Q*` folder typically contains:
 *   `referenced_spec/`: Detailed problem specifications (look for `human.md`).
 *   `result/`: Directory for storing simulation/synthesis results.
 *   `01_run.sh`: Shell script for open-source flow execution.
+*   new topics don't have referenced_spec yet
 
 ## Quick Start: Installing Yosys (OSS CAD Suite)
 
