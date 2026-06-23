@@ -14,6 +14,7 @@ The repository is organized into problem-specific directories (`Q1` through `Q6`
 | **Q4** | **HC** (Huffman Coding) | Create a hardware Huffman Coding generator for lossless compression. |
 | **Q5** | **JAM** (Job Assignment Machine) | Implement an exhaustive search solver for the Job Assignment problem (finding min cost assignment). |
 | **Q6** | **DT** (Distance Transform) | Design an engine to compute the Distance Transform (chessboard distance) for binary images. |
+| **Q7** | **REF** (Optical Refraction) | Calculate the final position of vertically incident light after refracting through a curved glass surface onto its bottom plane. |  
 
 ## Directory Structure
 
@@ -25,6 +26,7 @@ ICRTL/
 ├── Q4_HC/            # Huffman Coding Challenge
 ├── Q5_JAM/           # Job Assignment Machine Challenge
 ├── Q6_DT/            # Distance Transform Challenge
+├── Q7_REF/           # Optical Refraction Challenge
 └── VCS/              # Synopsys VCS / Design Compiler / PrimeTime Evaluation Flow
     ├── eval/         # Main evaluation scripts (auto_cycle.py, run_all.py)
     ├── 01_RTL/       # RTL Simulation setup
