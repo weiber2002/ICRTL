@@ -9,9 +9,8 @@ module REFRACT(
     output reg         DONE
 );
     
-    localparam IDLE = 0, CONST = 1, CALC = 2, SQRT = 3, CONST_2 = 4,  DIV = 5, OUTPUT =6, FINISH = 7;
-
-    reg [2:0] state_r, state_w;
+    typedef enum logic [2:0] {IDLE, CONST, SQRT, CONST_2, DIV, OUTPUT, FINISH} state_t;
+    state_t state_r, state_w;
 
     reg [3:0]  x_r, x_w;
     reg [3:0]  y_r, y_w;
