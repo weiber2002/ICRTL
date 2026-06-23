@@ -50,6 +50,60 @@ Each `Q*` folder typically contains:
 *   `result/`: Directory for storing simulation/synthesis results.
 *   `01_run.sh`: Shell script for open-source flow execution.
 
+## Quick Start: Installing Yosys (OSS CAD Suite)
+
+The `yosys` package available via some Linux distro package managers (e.g. apt) can be quite old (e.g. `0.9`), which lacks full SystemVerilog support (`-sv` parsing of constructs like `.*` implicit port connections) and is significantly slower on large designs. We recommend installing the latest nightly build via [OSS CAD Suite](https://github.com/YosysHQ/oss-cad-suite-build).
+
+**Steps:**
+
+1.  Download and extract the latest `linux-x64` release (release filenames are date-stamped, so grab the actual asset name from the [releases page](https://github.com/YosysHQ/oss-cad-suite-build/releases/latest) rather than guessing it):
+    ```bash
+    cd ~
+    URL=$(curl -s https://api.github.com/repos/YosysHQ/oss-cad-suite-build/releases/latest \
+      | grep "browser_download_url.*linux-x64" | cut -d '"' -f 4)
+    wget -O oss-cad-suite.tgz "$URL"
+    tar xzf oss-cad-suite.tgz
+    ```
+
+2.  Add it to your `PATH` (prepend so it takes priority over any older system/conda `yosys`):
+    ```bash
+    echo 'export PATH="$HOME/oss-cad-suite/bin:$PATH"' >> ~/.bashrc
+    source ~/.bashrc
+    ```
+
+3.  Verify the install:
+    ```bash
+    yosys -V
+    which yosys   # should point to ~/oss-cad-suite/bin/yosys
+    ```
+
+> **Note:** If you use a conda environment, double-check `which yosys` afterwards — conda environments can prepend their own `bin/` to `PATH` and shadow the OSS CAD Suite build.
+
+## Quick Start: Installing the PDK (NanGate45)
+
+The synthesis scripts (`02_run` / `01_run.sh`) reference a `.lib` file from the NanGate45 Synopsys-enablement PDK. **Clone it to a fixed path at `~/pdk/`** so the paths in this repo's scripts work without modification:
+
+```bash
+mkdir -p ~/pdk
+cd ~/pdk
+git clone https://github.com/ABKGroup/NanGate45-Synopsys-Enablement.git
+```
+
+This results in the following path, which the scripts expect:
+
+```
+~/pdk/NanGate45-Synopsys-Enablement/NanGate45/lib/NangateOpenCellLibrary_typical.lib
+```
+
+Verify the file exists:
+```bash
+ls -la ~/pdk/NanGate45-Synopsys-Enablement/NanGate45/lib/NangateOpenCellLibrary_typical.lib
+```
+
+> **No internet access on the target machine?** Clone the repo on a machine that has internet access, `tar czf` it, `scp` it over, then `tar xzf` it into `~/pdk/` on the target machine.
+
+> **Using a different path?** If you'd rather keep the PDK somewhere else, update the `LIB` variable at the top of each problem's synthesis script (e.g. `01_run.sh`) accordingly.
+
 ## How to Run
 
 There are two primary ways to run the designs: using the provided open-source scripts (Icarus Verilog + Yosys) or the commercial tool flow (VCS). Remind the location of your PDK files.
@@ -60,7 +114,8 @@ Each problem folder contains a `01_run.sh` script that runs simulation using `iv
 
 **Prerequisites:**
 *   `iverilog` (Icarus Verilog)
-*   `yosys` (Yosys Open SYnthesis Suite)
+*   `yosys` (Yosys Open SYnthesis Suite) — see [Quick Start: Installing Yosys](#quick-start-installing-yosys-oss-cad-suite) above for installing an up-to-date build
+*   NanGate45 PDK installed at `~/pdk/` — see [Quick Start: Installing the PDK](#quick-start-installing-the-pdk-nangate45) above
 
 **Steps:**
 1.  Navigate to the problem directory (e.g., `Q1_LBP`).
@@ -91,4 +146,3 @@ The `VCS` directory contains a Python-based evaluation framework designed for a 
     python3 run_all.py
     ```
     *Note: You may need to edit `run_all.py` to select which questions to run by modifying the `QUESTIONS` list.*
-
