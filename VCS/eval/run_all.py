@@ -7,7 +7,7 @@ import re
 import subprocess
 import time
 
-QUESTIONS = ["Q1_LBP", "Q2_GEMM", "Q3_CONV", "Q4_JAM", "Q5_HC", "Q6_DT"]
+QUESTIONS = ["Q1_LBP", "Q10_GEMM", "Q2_CONV", "Q3_JAM", "Q4_HC", "Q5_DT"]
 PT_SCRIPT_PATH = "./04_POWER/pt_script.tcl"
 AUTO_CYCLE_CMD = "python3 auto_cycle.py"
 
