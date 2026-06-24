@@ -3,15 +3,15 @@ for ri in $(seq 1 7); do
     echo "=================================================="
     echo "Compiling and running RI = ${ri}"
     echo "=================================================="
-    iverilog -g2012 -o a.out ./ref_solution/IOTDF.v ./00_TB/tb.v -DF${ri}
+    iverilog -g2012 -o a.out ./ref_solution/initial.sv ./00_TB/tb.sv -DF${ri}
     vvp a.out
 done
 # ########################  Synthesis ############################
 LIB=$HOME/pdk/NanGate45-Synopsys-Enablement/NanGate45/lib/NangateOpenCellLibrary_typical.lib
 
 yosys -p "
-  read_verilog -sv ./ref_solution/IOTDF.v ;
-  hierarchy -top IOTDF;
+  read_verilog -sv ./ref_solution/initial.sv ;
+  hierarchy -top TOP;
   proc; opt; fsm; opt; memory; opt;
   techmap; opt;
   dfflibmap -liberty $LIB;
