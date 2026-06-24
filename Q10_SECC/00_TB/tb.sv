@@ -86,7 +86,7 @@ initial begin
 `endif
 end
 
-SET u_set( .clk(clk), .rst(rst), .en(en), .central(central), .radius(radius), .mode(mode), .busy(busy), .valid(valid), .candidate(candidate) );
+TOP u_set( .clk(clk), .rst(rst), .en(en), .central(central), .radius(radius), .mode(mode), .busy(busy), .valid(valid), .candidate(candidate) );
 
 integer k;
 integer p;

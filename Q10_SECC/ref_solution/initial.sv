@@ -1,4 +1,4 @@
-module SET ( clk , rst, en, central, radius, mode, busy, valid, candidate );
+module TOP ( clk , rst, en, central, radius, mode, busy, valid, candidate );
 
     input clk, rst;
     input en;
