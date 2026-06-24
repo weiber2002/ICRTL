@@ -18,6 +18,7 @@ The repository is organized into problem-specific directories (`Q1` through `Q6`
 | **Q6** | **DT** (Distance Transform) | Design an engine to compute the Distance Transform (chessboard distance) for binary images. |
 | **Q7** | **REF** (Optical Refraction) | Calculate the final position of vertically incident light after refracting through a curved glass surface onto its bottom plane. |  
 | **Q8** | **GEO** (Geofence) | Build a Geofence System | 
+| **Q9** | **IOT** (IoT Data Filtering) | This circuit performs real-time analysis and processing of massive IoT data collected from smart devices or sensors, according to a specified application function. |
 
 ## Directory Structure
 
@@ -31,6 +32,7 @@ ICRTL/
 ├── Q6_DT/            # Distance Transform Challenge
 ├── Q7_REF/           # Optical Refraction Challenge
 ├── Q8_GEO/           # Geofence Challenge
+├── Q9_IOT/           # IoT Data Filtering Challenge
 └── VCS/              # Synopsys VCS / Design Compiler / PrimeTime Evaluation Flow
     ├── eval/         # Main evaluation scripts (auto_cycle.py, run_all.py)
     ├── 01_RTL/       # RTL Simulation setup
