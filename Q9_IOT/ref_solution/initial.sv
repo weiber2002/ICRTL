@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module IOTDF( clk, rst, in_en, iot_in, fn_sel, busy, valid, iot_out);
+module TOP( clk, rst, in_en, iot_in, fn_sel, busy, valid, iot_out);
     input          clk;
     input          rst;
     input          in_en;
