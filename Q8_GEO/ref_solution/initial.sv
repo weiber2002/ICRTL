@@ -1,4 +1,4 @@
-module geofence (clk, reset, X, Y, R, valid, is_inside);
+module TOP (clk, reset, X, Y, R, valid, is_inside);
     input clk;
     input reset;
     input [9:0] X;

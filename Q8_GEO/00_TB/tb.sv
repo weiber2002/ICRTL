@@ -20,7 +20,7 @@ reg clk = 0;
 wire valid;
 reg reset =0;
 wire is_inside;
-geofence u_geofence(.clk(clk),
+TOP  u_geofence(.clk(clk),
         .reset(reset),
         .X(X),
         .Y(Y),
