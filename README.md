@@ -11,30 +11,31 @@ The repository is organized into problem-specific directories (`Q1` through `Q6`
 | ID | Problem Name | Description |
 |----|--------------|-------------|
 | **Q1** | **LBP** (Local Binary Pattern) | Design an accelerator to compute Local Binary Patterns for 128x128 grayscale images. |
-| **Q2** | **GEMM** (Systolic Array) | Implement a Systolic Array based matrix processing unit. |
-| **Q3** | **CONV** (Convolution) | Develop a hardware accelerator for 2D convolution operations on 64x64 images. |
-| **Q4** | **HC** (Huffman Coding) | Create a hardware Huffman Coding generator for lossless compression. |
-| **Q5** | **JAM** (Job Assignment Machine) | Implement an exhaustive search solver for the Job Assignment problem (finding min cost assignment). |
-| **Q6** | **DT** (Distance Transform) | Design an engine to compute the Distance Transform (chessboard distance) for binary images. |
-| **Q7** | **REF** (Optical Refraction) | Calculate the final position of vertically incident light after refracting through a curved glass surface onto its bottom plane. |  
-| **Q8** | **GEO** (Geofence) | Build a Geofence System | 
-| **Q9** | **IOT** (IoT Data Filtering) | This circuit performs real-time analysis and processing of massive IoT data collected from smart devices or sensors, according to a specified application function. |
-| **Q10** | **SECC** (Set Element Coverage Counter) | Count the total number of covered vertices using set operations on multiple overlapping circles. |
+| **Q2** | **CONV** (Convolution) | Develop a hardware accelerator for 2D convolution operations on 64x64 images. |
+| **Q3** | **HC** (Huffman Coding) | Create a hardware Huffman Coding generator for lossless compression. |
+| **Q4** | **JAM** (Job Assignment Machine) | Implement an exhaustive search solver for the Job Assignment problem (finding min cost assignment). |
+| **Q5** | **DT** (Distance Transform) | Design an engine to compute the Distance Transform (chessboard distance) for binary images. |
+| **Q6** | **REF** (Optical Refraction) | Calculate the final position of vertically incident light after refracting through a curved glass surface onto its bottom plane. |  
+| **Q7** | **GEO** (Geofence) | Build a Geofence System | 
+| **Q8** | **IOT** (IoT Data Filtering) | This circuit performs real-time analysis and processing of massive IoT data collected from smart devices or sensors, according to a specified application function. |
+| **Q9** | **SECC** (Set Element Coverage Counter) | Count the total number of covered vertices using set operations on multiple overlapping circles. |
+| **Q10** | **GEMM** (Systolic Array) | Implement a Systolic Array based matrix processing unit. |
 
 ## Directory Structure
 
 ```
 ICRTL/
 ├── Q1_LBP/           # Local Binary Pattern Challenge
-├── Q2_GEMM/          # Systolic Array Challenge
-├── Q3_CONV/          # Convolution Challenge
-├── Q4_HC/            # Huffman Coding Challenge
-├── Q5_JAM/           # Job Assignment Machine Challenge
-├── Q6_DT/            # Distance Transform Challenge
-├── Q7_REF/           # Optical Refraction Challenge
-├── Q8_GEO/           # Geofence Challenge
-├── Q9_IOT/           # IoT Data Filtering Challenge
-├── Q10_SECC/         # Set Element Coverage Counter Challenge
+├── Q2_CONV/          # Convolution Challenge
+├── Q3_HC/            # Huffman Coding Challenge
+├── Q4_JAM/           # Job Assignment Machine Challenge
+├── Q5_DT/            # Distance Transform Challenge
+├── Q6_REF/           # Optical Refraction Challenge
+├── Q7_GEO/           # Geofence Challenge
+├── Q8_IOT/           # IoT Data Filtering Challenge
+├── Q9_SECC/          # Set Element Coverage Counter Challenge
+├── Q10_GEMM/         # Systolic Array Challenge
+├── PROMPT_Generate.  # Referenced Prompts for generating SPEC, Code Generation, and Code Optimization
 └── VCS/              # Synopsys VCS / Design Compiler / PrimeTime Evaluation Flow
     ├── eval/         # Main evaluation scripts (auto_cycle.py, run_all.py)
     ├── 01_RTL/       # RTL Simulation setup
@@ -54,12 +55,11 @@ ICRTL/
 ```
 
 Each `Q*` folder typically contains:
-*   `00_TB/`: Testbench files.
-*   `ref_solution/`: Initial RTL templates or reference solutions.
-*   `referenced_spec/`: Detailed problem specifications (look for `human.md`).
-*   `result/`: Directory for storing simulation/synthesis results.
+*   `00_TB/`: Testbench files and golden data.
+*   `ref_solution/`: Reference solutions (can be executed on Yosys - no DesignWare).
+*   `SPEC.md`: LLM-readable SPEC extracted from Original_SPEC, including a description of the current implementation.
+*   `Original_SPEC.pdf`: The original version of the SPEC written in Chinese.
 *   `01_run.sh`: Shell script for open-source flow execution.
-*   new topics don't have referenced_spec yet
 
 ## Quick Start: Installing Yosys (OSS CAD Suite)
 
@@ -135,9 +135,6 @@ Each problem folder contains a `01_run.sh` script that runs simulation using `iv
     cd Q1_LBP
     bash 01_run.sh
     ```
-3.  Check `result/` for logs:
-    *   `latency.log`: Simulation output.
-    *   `area.log`: Synthesis area report.
 
 ### Method 2: VCS / Evaluation Flow
 
