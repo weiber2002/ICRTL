@@ -1,4 +1,4 @@
-module REFRACT(
+module TOP(
     input  wire        CLK,
     input  wire        RST,
     input  wire [3:0]  RI,   
