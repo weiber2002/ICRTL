@@ -1,12 +1,12 @@
 
 `timescale 1ns/10ps
-`define CYCLE      50.0  
+`define CYCLE      50.0
 `define SDFFILE    "./REFRACT_syn.sdf"
-`define MAX_CYCLE  100000
+`define MAX_CYCLE  4000000
 `define SHOW_MISMATCH_MAX 8
 `define SHOW_MATCH 0
 
-`define TOLERANCE_RADIUS 64 // tolerance = 64/4096 unit 
+`define TOLERANCE_RADIUS 64 // tolerance = 64/4096 unit
 
 
 module testfixture();
@@ -28,18 +28,6 @@ SRAM u_SRAM ( .A(SRAM_A), .CLK(CLK), .D(SRAM_D), .Q(SRAM_Q), .WE(SRAM_WE));
     initial $sdf_annotate(`SDFFILE, u_REFRACT);
 `endif
 
-
-//initial begin
-//    $fsdbDumpfile("REFRACT.fsdb");
-//    $fsdbDumpvars();
-//    $fsdbDumpMDA;
-//end
-
-initial begin
-    $dumpfile("REFRACT.vcd");
-    $dumpvars;
-end
-
 integer mismatch_cnt;
 integer show_cnt;
 integer x,y;
@@ -48,6 +36,7 @@ reg [15:0] get_x,get_y;
 integer error_distance;
 real    error_distance_real;
 integer mem_index;
+integer ri;
 
 
 function integer distance;
@@ -66,7 +55,7 @@ function integer distance;
         if (^{x1,y1,x2,y2}===1'bx) distance = -1;
         else begin
             dist_square= (nx1-nx2)**2+(ny1-ny2)**2 ;
-            distance= $sqrt(dist_square); 
+            distance= $sqrt(dist_square);
             //$display("%f,%f",dist_square,distance);
         end
     end
@@ -77,85 +66,85 @@ initial begin
     $timeformat(-9,2,"ns",20);
 end
 
-reg [8*64-1:0] golden_fname;   
+reg [8*64-1:0] golden_fname;
 reg [15:0] golden [0:511];
-
-`ifndef RI
-    `define RI 5
-`endif
-
-initial begin
-    INDEX = `RI ;
-    $sformat(golden_fname, "00_TB/golden/golden_%0d.memh", INDEX);
-    $display("Loading golden file: %0s", golden_fname);
-    $readmemh(golden_fname, golden);
-end
 
 initial begin
     CLK = 1'b0;
-    forever #(`CYCLE/2) CLK = ~CLK; 
+    forever #(`CYCLE/2) CLK = ~CLK;
 end
 
-reg [22:0] cycle_cnt=0;
+reg [31:0] cycle_cnt=0;
 real    tolerance_distance = `TOLERANCE_RADIUS/4096.0;
 
 initial begin
-    $display("--------------------------------");
-    $display("-- Simulation Start , RI = %d --",INDEX);
-    $display("--------------------------------");
-    RST = 1'b1; 
+    RST = 1'b1;
     mismatch_cnt = 0;
-    cycle_cnt=0;
-    show_cnt=0;
-    #(`CYCLE*2);  
-    @(posedge CLK);  #1  RST = 1'b0;
-    repeat (2) @(posedge CLK);
+    cycle_cnt = 0;
+    show_cnt = 0;
 
-    wait (DONE === 1'b1);
-    $display("%10t, Recive DONE", $time);
+    // Sweep RI = 2..15 in a single simulation.
+    for (ri = 2; ri <= 15; ri = ri + 1) begin
+        INDEX = ri;
+        $sformat(golden_fname, "00_TB/golden/golden_%0d.memh", INDEX);
+        $readmemh(golden_fname, golden);
+        $display("--------------------------------");
+        $display("-- Simulation Start , RI = %d --", INDEX);
+        $display("--------------------------------");
 
-    for (y = 0; y < 16; y = y + 1) begin
-        for (x = 0; x < 16; x = x + 1) begin
-            mem_index = y*16+x*2;
-            get_x = u_SRAM.mem[mem_index];
-            get_y = u_SRAM.mem[mem_index+1];
-            golden_x = golden[mem_index];
-            golden_y = golden[mem_index+1];
-            error_distance = distance(get_x,get_y,golden_x,golden_y);
-            error_distance_real = error_distance;
-            if (error_distance>0) begin
-                error_distance_real = error_distance/4096.0;
-            end
+        // Clear the external SRAM contents before each run.
+        for (mem_index = 0; mem_index < 512; mem_index = mem_index + 1)
+            u_SRAM.mem[mem_index] = 16'h0000;
 
-            if ((error_distance<0) || (error_distance > `TOLERANCE_RADIUS)) begin
-                mismatch_cnt = mismatch_cnt + 1;
-                if (show_cnt < `SHOW_MISMATCH_MAX) begin
-                    $display("MISMATCH (%0d,%0d), got= (0x%04h,0x%04h), exp=(0x%04h,0x%04h) distance=%g ", x,y,get_x,get_y,golden_x,golden_y,error_distance_real);
-                    show_cnt = show_cnt + 1;
+        // Reset the DUT for this RI.
+        RST = 1'b1;
+        #(`CYCLE*2);
+        @(posedge CLK); #1 RST = 1'b0;
+        repeat (2) @(posedge CLK);
+
+        wait (DONE === 1'b1);
+        $display("%10t, Receive DONE", $time);
+
+        for (y = 0; y < 16; y = y + 1) begin
+            for (x = 0; x < 16; x = x + 1) begin
+                mem_index = y*16+x*2;
+                get_x = u_SRAM.mem[mem_index];
+                get_y = u_SRAM.mem[mem_index+1];
+                golden_x = golden[mem_index];
+                golden_y = golden[mem_index+1];
+                error_distance = distance(get_x,get_y,golden_x,golden_y);
+                error_distance_real = error_distance;
+                if (error_distance>0) begin
+                    error_distance_real = error_distance/4096.0;
                 end
-            end else begin
-                if (`SHOW_MATCH) begin
-                    $display("MATCH (%0d,%0d), got= (0x%04h,0x%04h), exp=(0x%04h,0x%04h) distance=%g ", x,y,get_x,get_y,golden_x,golden_y,error_distance_real);
+
+                if ((error_distance<0) || (error_distance > `TOLERANCE_RADIUS)) begin
+                    mismatch_cnt = mismatch_cnt + 1;
+                    if (show_cnt < `SHOW_MISMATCH_MAX) begin
+                        $display("MISMATCH RI=%0d (%0d,%0d), got= (0x%04h,0x%04h), exp=(0x%04h,0x%04h) distance=%g ", INDEX,x,y,get_x,get_y,golden_x,golden_y,error_distance_real);
+                        show_cnt = show_cnt + 1;
+                    end
+                end else begin
+                    if (`SHOW_MATCH) begin
+                        $display("MATCH (%0d,%0d), got= (0x%04h,0x%04h), exp=(0x%04h,0x%04h) distance=%g ", x,y,get_x,get_y,golden_x,golden_y,error_distance_real);
+                    end
                 end
             end
         end
+
+        // Wait for the DUT to drop DONE before re-asserting reset for the next RI.
+        RST = 1'b1;
+        wait (DONE !== 1'b1);
     end
 
-
-    if (mismatch_cnt == 0) begin
-        $display("--------------------------------------------------");
-        $display("-- Simulation Finished , RI = %d",INDEX);
-        $display("-- PASS: all 256 points match " );
-        $display("-- Execution Time: %10t", $time);
-        $display("--------------------------------------------------");
-    end else begin
-        $display("-------------------------------------------------------------------------");
-        $display("-- Simulation Finished , RI = %d , Max tolerance diatance = %g",INDEX, tolerance_distance);
-        $display("-- FAIL: mismatches = %0d / 256", mismatch_cnt);
-        $display("-- Execution Time: %10t", $time);
-        $display("-------------------------------------------------------------------------");
-    end
-
+    $display("--------------------------------------------------");
+    $display("Total Error: %0d", mismatch_cnt);
+    if (mismatch_cnt == 0)
+        $display("All tests PASS");
+    else
+        $display("FAIL: mismatches = %0d / %0d points", mismatch_cnt, 256*14);
+    $display("total time: %0d cycles", cycle_cnt);
+    $display("--------------------------------------------------");
     $finish;
 end
 
@@ -164,7 +153,8 @@ always @(posedge CLK) begin
     if (cycle_cnt > `MAX_CYCLE) begin
         $display("--------------------------------------------------");
         $display("-- MAX_CYCLE %d reached, Simulation STOP ", `MAX_CYCLE);
-        $display("-- You can extend MAX_CYCLE in tb.v if necessary.");
+        $display("Total Error: %0d", mismatch_cnt);
+        $display("total time: %0d cycles", cycle_cnt);
         $display("--------------------------------------------------");
         $finish;
     end
@@ -192,4 +182,3 @@ module SRAM (
         Q <= mem[A];
     end
 endmodule
-

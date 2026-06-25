@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-`define CYCLE      50.0  
+`define CYCLE      50.0
 `define SDFFILE    "./geofence_syn.sdf"
 `define End_CYCLE  1000000
 `define PAT        "./00_TB/grad.data"
@@ -8,10 +8,9 @@ module testfixture();
 integer fd;
 integer objnum;
 integer obj_isin;
-integer charcount;
+integer c;
 integer pass=0;
 integer fail=0;
-string line;
 reg [9:0] X;
 reg [9:0] Y;
 reg [10:0] R;
@@ -34,33 +33,24 @@ TOP  u_geofence(.clk(clk),
 
 always begin #(`CYCLE/2) clk = ~clk; end
 
-// initial begin
-//     $fsdbDumpfile("geofence.fsdb");
-//     $fsdbDumpvars();
-//     $fsdbDumpMDA;
-// end
-
-//initial begin
-//    $dumpfile("geofence.vcd");
-//    $dumpvars;
-//end
-
 initial begin
     $display("----------------------");
     $display("-- Simulation Start --");
     $display("----------------------");
-    @(posedge clk);  #2 reset = 1'b1; 
-    #(`CYCLE*2);  
+    @(posedge clk);  #2 reset = 1'b1;
+    #(`CYCLE*2);
     @(posedge clk);  #2  reset = 1'b0;
 end
 
-reg [22:0] cycle=0;
+reg [31:0] cycle=0;
 
 always @(posedge clk) begin
     cycle=cycle+1;
     if (cycle > `End_CYCLE) begin
         $display("--------------------------------------------------");
         $display("-- Failed waiting valid signal, Simulation STOP --");
+        $display("Total Error: %0d", fail);
+        $display("total time: %0d cycles", cycle);
         $display("--------------------------------------------------");
         $fclose(fd);
         $finish;
@@ -75,10 +65,6 @@ initial begin
     end
 end
 
-reg  valid_reg;
-always @(posedge clk) begin
-    valid_reg = valid;
-end
 reg wait_valid;
 reg get_inside;
 integer ap_num;
@@ -114,39 +100,39 @@ always @(negedge clk ) begin
         Y=0;
         R=0;
         ap_num = 0;
-    end 
+    end
     else begin
         if (!$feof(fd)) begin
-            if(wait_valid ==0) begin
-                charcount = $fgets (line, fd);
-                if(charcount != 0) begin
-                    while( line.substr(1, 2) == "//") charcount = $fgets (line, fd);
-                    if( line.substr(0, 5) == "object") begin
-                        charcount = $sscanf(line, "object %d %d",objnum,obj_isin);
+            if(wait_valid == 0) begin
+                if (ap_num == 0 || ap_num == 6) begin
+                    // Start of a new object: read its header, then the first aperture.
+                    c = $fscanf(fd, " object %d %d", objnum, obj_isin);
+                    if (c == 2) begin
                         if(obj_isin == 1)
                             $display ("Object%0d(in):   X     Y     R",objnum);
                         else
                             $display ("Object%0d(out):  X     Y     R",objnum);
-                        ap_num=1;
-                        charcount = $fgets (line, fd);
-                        charcount = $sscanf(line, "%d %d %d",X,Y,R);
-                        $display("%d: %d, %d, %d",ap_num, X ,Y,R);
-                    end 
-                    else begin
-                        ap_num = ap_num+1;
-                        charcount = $sscanf(line, "%d %d %d",X,Y,R);
-                        $display("%d: %d, %d, %d",ap_num, X ,Y,R);
+                        ap_num = 1;
+                        c = $fscanf(fd, " %d %d %d", X, Y, R);
+                        $display("%d: %d, %d, %d", ap_num, X, Y, R);
                     end
+                end
+                else begin
+                    ap_num = ap_num + 1;
+                    c = $fscanf(fd, " %d %d %d", X, Y, R);
+                    $display("%d: %d, %d, %d", ap_num, X, Y, R);
                 end
             end
         end //if (!$feof(fd)) begin
         else begin
              $fclose(fd);
              $display ("-------------------------------------------------");
+             $display("Total Error: %0d", fail);
              if(fail == 0)
-                 $display("--    Simulation finish,  ALL PASS             --");
+                 $display("All tests PASS");
              else
-                 $display("-- Simulation finish,  Pass = %2d , Fail = %2d   --",pass,fail);
+                 $display("Simulation finish,  Pass = %2d , Fail = %2d", pass, fail);
+             $display("total time: %0d cycles", cycle);
              $display ("-------------------------------------------------");
              $finish;
         end
