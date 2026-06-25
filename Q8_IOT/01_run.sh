@@ -3,7 +3,7 @@ for ri in $(seq 1 7); do
     echo "=================================================="
     echo "Compiling and running RI = ${ri}"
     echo "=================================================="
-    iverilog -g2012 -o a.out ./ref_solution/initial.sv ./00_TB/tb.sv -DF${ri}
+    iverilog -g2012 -o a.out ./ref_solution/initial.sv ./00_TB/test.sv -DF${ri}
     vvp a.out
 done
 # ########################  Synthesis ############################
