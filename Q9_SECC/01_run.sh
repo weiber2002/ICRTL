@@ -7,7 +7,7 @@ LIB=$HOME/pdk/NanGate45-Synopsys-Enablement/NanGate45/lib/NangateOpenCellLibrary
 
 yosys -p "
   read_verilog -sv ./ref_solution/initial.sv ;
-  hierarchy -top SET;
+  hierarchy -top TOP;
   proc; opt; fsm; opt; memory; opt;
   techmap; opt;
   dfflibmap -liberty $LIB;
