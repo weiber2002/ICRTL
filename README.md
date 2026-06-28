@@ -1,9 +1,10 @@
-# ICRTL - Integrated Circuit RTL Design Challenges
+# ICRTL: The Industrial-Level Verilog RTL Benchmark
 
-This repository contains a collection of industrial-level RTL design challenges selected from the National Taiwan Integrated Circuit Design Contest and handcrafted problems, complete with our reference implementations and specs. Each challenge targets specific algorithms or hardware modules used in industry. We present this collection as the ICRTL benchmark, designed to evaluate PPA optimization on complex problems — a level of difficulty previously unexplored in the application of LLMs to RTL design.
+This repository presents the **ICRTL Benchmark**, a comprehensive collection of industrial-level **Verilog RTL design challenges**. Sourced from the prestigious National Taiwan Integrated Circuit Design Contest alongside meticulously handcrafted problems, this repository includes complete specifications and reference implementations. 
 
-Building this benchmark from scratch presented significant challenges, particularly in ensuring compatibility with open-source tools like Yosys without relying on proprietary IPs. We successfully overcame these obstacles thanks to the incredible efforts of our developers.
+Each challenge targets specific algorithms and hardware modules utilized in the modern IC industry. We designed this collection to serve as a premier **RTL benchmark** for evaluating PPA (Power, Performance, and Area) optimization on highly complex problems—a level of difficulty previously unexplored in the application of LLMs to EDA and RTL design.
 
+Building this benchmark from scratch presented significant obstacles, particularly in ensuring seamless compatibility with open-source synthesis tools like Yosys without relying on proprietary IPs. We successfully overcame these barriers to provide a 100% open-source compatible flow, thanks to the incredible efforts of our development team.
 ## Challenges Overview
 
 The repository is organized into problem-specific directories (`Q1` through `Q6`), each containing the problem specification, testbench, and reference solution foundation.
