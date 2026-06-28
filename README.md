@@ -1,4 +1,4 @@
-# ICRTL: The Industrial-Level Verilog RTL Benchmark
+# ICRTL: The Open-sourced Industrial-Level Verilog RTL Benchmark
 
 This repository presents the **ICRTL Benchmark**, a comprehensive collection of industrial-level **Verilog RTL design challenges**. Sourced from the prestigious National Taiwan Integrated Circuit Design Contest alongside meticulously handcrafted problems, this repository includes complete specifications and reference implementations. 
 
