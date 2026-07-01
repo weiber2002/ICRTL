@@ -1,18 +1,20 @@
+set company {NTUGIEE}
+set designer {Student}
 
-set company "CIC"
-set designer "Student"
-set search_path       "./ /CIC/SynopsysDC/db  $search_path"
-set target_library    "slow.db"
-set link_library      "* $target_library"
+set search_path      ". /home/raid7_2/course/cvsd/CBDK_IC_Contest/CIC/SynopsysDC/db  $search_path ../ ./"
+set target_library [list "typical.db" "slow.db" "fast.db"]
+set link_library     "* $target_library dw_foundation.sldb"
+set symbol_library [list "generic.sdb"]
+set synthetic_library "dw_foundation.sldb"
+set default_schematic_options {-size infinite}
 
 set hdlin_translate_off_skip_text "TRUE"
 set edifout_netlist_only "TRUE"
 set verilogout_no_tri true
+set plot_command {lpr -Plw}
+set hdlin_auto_save_templates "TRUE"
+set compile_fix_multiple_port_nets "TRUE"
 
-set hdlin_enable_presto_for_vhdl "TRUE"
-set sh_enable_line_editing true
-set sh_line_editing_mode emacs
-history keep 100
 alias h history
 
 
@@ -32,7 +34,7 @@ read_sdf -load_delay net ../02_SYN/Netlist/top_syn.sdf
 #report_switching_activity -list_not_annotated -show_pin
 
 
-read_fsdb -time {0 10000}  -strip_path test/TOP  ../03_GATE/top.fsdb
+read_vcd -strip_path test/TOP  ../03_GATE/top.vcd
 # read_fsdb -time {0 10000}  -strip_path test/TOP_Control/TOP  ../03_GATE/top.fsdb
 update_power
 report_power 

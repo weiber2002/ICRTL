@@ -1,20 +1,27 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+
+from __future__ import print_function
 
 import subprocess
 import re
 import os
 import csv
+import time
 from datetime import datetime
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
 def run_cmd(cmd, cwd):
+    """執行指令並回傳 (輸出文字, 耗時秒數)。"""
+    start = time.time()
     try:
         result = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True, cwd=cwd)
-        return result.decode('utf-8', 'ignore')
+        out = result.decode('utf-8', 'ignore')
     except subprocess.CalledProcessError as e:
-        return e.output.decode('utf-8', 'ignore')
+        out = e.output.decode('utf-8', 'ignore')
+    elapsed = time.time() - start
+    return out, elapsed
 
 def grep(pattern, text):
     match = re.search(pattern, text)
@@ -22,7 +29,8 @@ def grep(pattern, text):
 
 # 01_RTL
 print("Running RTL simulation...")
-rtl_log = run_cmd('bash -c "cd 01_RTL && source 01_run"', ROOT)
+rtl_log, rtl_time = run_cmd('bash -c "cd 01_RTL && source 01_run"', ROOT)
+print("    [TIME] RTL   : {0:.1f}s".format(rtl_time))
 rtl_sim = 'PASS' if 'All tests PASS!' in rtl_log else 'FAIL'
 cycle_period_str = grep(r'Cycle Period\s*=\s*(\d+(\.\d+)?)', rtl_log)
 array_compute_cycles_str = grep(r'total time:\s*(\d+)\s*cycles', rtl_log)
@@ -43,9 +51,9 @@ evaluation_time_ns = float(evaluation_time_ps) / 1000 if evaluation_time_ps else
 compute_time_ns = float(array_compute_cycles) * float(cycle_period) if array_compute_cycles and cycle_period else ''
 
 # 02_SYN
-
 print("Running Synthesis... (This may take a while)")
-syn_log = run_cmd('bash -c "cd 02_SYN && source 02_run"', ROOT)
+syn_log, syn_time = run_cmd('bash -c "cd 02_SYN && source 02_run"', ROOT)
+print("    [TIME] SYN   : {0:.1f}s".format(syn_time))
 
 print("Extracting synthesis area and violation...")
 
@@ -62,12 +70,14 @@ violation = 'VIOLATION' if 'VIOLATED' in timing_txt else 'Clean'
 
 # 03_GATE
 print("Running Gate-level simulation...")
-gate_log = run_cmd('bash -c "cd 03_GATE && source 03_run"', ROOT)
+gate_log, gate_time = run_cmd('bash -c "cd 03_GATE && source 03_run"', ROOT)
+print("    [TIME] GATE  : {0:.1f}s".format(gate_time))
 gate_sim = 'PASS' if 'All tests PASS!' in gate_log else 'FAIL'
 
 # 04_POWER
 print("Running Power analysis...")
-power_log = run_cmd('bash -c "cd 04_POWER && source 04_run "', ROOT)
+power_log, power_time = run_cmd('bash -c "cd 04_POWER && source 04_run "', ROOT)
+print("    [TIME] POWER : {0:.1f}s".format(power_time))
 power_path = os.path.join(ROOT, '04_POWER', 'top.power')
 power_txt = open(power_path).read() if os.path.exists(power_path) else ''
 power_total = grep(r'Total Power\s*=\s*([\d\.]+)', power_txt)
@@ -80,43 +90,54 @@ try:
     ppa_compute = float(area_total) * float(compute_time_ns) * float(power_total)
 except Exception:
     ppa_compute = ''
-    
-    
+
+total_runtime = rtl_time + syn_time + gate_time + power_time
+print("    [TIME] TOTAL : {0:.1f}s".format(total_runtime))
+
 source_file_name = os.environ.get('TARGET_FILENAME', 'N/A')
 
 # write CSV
 csv_path = os.path.join(ROOT, 'evaluation.csv')
 header = [
-    'Timestamp', 
-    'Source File', 
-    'RTL_sim', 'Cycle Period', 
-    'Area_seq(mm^2)', 'Area_comb(mm^2)', 'Area_total(mm^2)', 
-    'Evaluation time(ns)', 'Array_compute time(ns)', 
-    'GATE_sim', 'Power(mW)', 
-    'PPA_total', 'PPA_compute_time'
+    'Timestamp',
+    'Source File',
+    'RTL_sim', 'Cycle Period',
+    'Area_seq(mm^2)', 'Area_comb(mm^2)', 'Area_total(mm^2)',
+    'Evaluation time(ns)', 'Array_compute time(ns)',
+    'GATE_sim', 'Power(mW)',
+    'PPA_total', 'PPA_compute_time',
+    'RTL_runtime(s)', 'SYN_runtime(s)', 'GATE_runtime(s)', 'POWER_runtime(s)', 'Total_runtime(s)'
 ]
 row = [
     datetime.now().strftime('%Y/%m/%d %H:%M'),
-    source_file_name, 
-    rtl_sim, 
-    cycle_period, 
-    area_seq, 
-    area_comb, 
-    area_total, 
-    evaluation_time_ns, 
-    compute_time_ns, 
-    gate_sim, 
+    source_file_name,
+    rtl_sim,
+    cycle_period,
+    area_seq,
+    area_comb,
+    area_total,
+    evaluation_time_ns,
+    compute_time_ns,
+    gate_sim,
     power_total,
     ppa_total,
-    ppa_compute
+    ppa_compute,
+    round(rtl_time, 2),
+    round(syn_time, 2),
+    round(gate_time, 2),
+    round(power_time, 2),
+    round(total_runtime, 2)
 ]
 
 write_header = not os.path.isfile(csv_path)
-with open(csv_path, 'a') as f:
+f = open(csv_path, 'ab')
+try:
     writer = csv.writer(f)
     if write_header:
         writer.writerow(header)
     writer.writerow(row)
+finally:
+    f.close()
 
 
 print("\n[DONE] Results recorded in evaluation.csv")

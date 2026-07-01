@@ -44,10 +44,12 @@ wire [47:0] CNT_G, CNT_EXP;
 wire [47:0] HC_G, HC_EXP;
 wire [47:0] M_G, M_EXP;
 
+`ifdef SDF
 initial begin
-$fsdbDumpfile("top.fsdb");
-$fsdbDumpvars(0, test);
+$dumpfile("top.vcd");
+$dumpvars(0, test.TOP);
 end
+`endif
 
 localparam SDFFILE = "../02_SYN/Netlist/top_syn.sdf";
 `ifdef SDF

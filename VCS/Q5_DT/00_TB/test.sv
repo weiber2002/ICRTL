@@ -72,10 +72,8 @@ initial begin
     $display(" Cycle Period = %0f ns", `CYCLE);
 end
 initial begin
-	`ifdef FSDB
-		$fsdbDumpfile("top.fsdb");
-		$fsdbDumpvars(0, test);
-	`elsif VCD
+	
+	`ifdef SDF
 		$dumpfile("top.vcd");
 		$dumpvars;
 	`endif	

@@ -36,12 +36,14 @@ module TOP (
     reg [15:0] tileB_w [0:27], tileB_r [0:27];
     
     // state machine 
-    typedef enum logic [1:0] {
-        LOADING, 
-        COMPUTE,
-        DONE
-    } state_t;
-    state_t state_w, state_r;
+    // typedef enum logic [1:0] {
+    //     LOADING, 
+    //     COMPUTE,
+    //     DONE
+    // } state_t;
+    // state_t state_w, state_r;
+    localparam LOADING = 2'b00, COMPUTE = 2'b01, DONE = 2'b10;
+    reg [1:0] state_w, state_r;
 
     reg [1:0] load_num_w, load_num_r;
     reg [4:0] propagate_num_w, propagate_num_r;

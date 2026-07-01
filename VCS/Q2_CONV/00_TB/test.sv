@@ -67,18 +67,19 @@ TOP TOP(
 
 always begin #(`CYCLE/2) clk = ~clk; end
 
-initial begin
-	$fsdbDumpfile("CONV.fsdb");
-	$fsdbDumpvars(0, test);
-end
+//initial begin
+//	$fsdbDumpfile("CONV.fsdb");
+//	$fsdbDumpvars(0, test);
+//end
 initial begin
 	$display(" Cycle Period = %0f ns", `CYCLE);
 end
-
-// initial begin
-// 	$dumpfile("CONV.vcd");
-// 	$dumpvars(0, testfixture);
-// end
+`ifdef SDF
+ initial begin
+ 	$dumpfile("top.vcd");
+ 	$dumpvars(0, test.TOP);
+ end
+`endif
 
 initial begin  // global control
 	$display("-----------------------------------------------------\n");

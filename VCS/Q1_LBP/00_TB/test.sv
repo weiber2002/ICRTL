@@ -49,11 +49,12 @@ initial	$readmemh (`EXP, exp_mem);
 
 always begin #(`CYCLE/2) clk = ~clk; end
 
-// initial begin
-// 	$fsdbDumpfile("LBP.fsdb");
-// 	$fsdbDumpvars;
-// end
-
+`ifdef SDF
+initial begin
+ 	$dumpfile("top.vcd");
+ 	$dumpvars(0, test.TOP);
+end
+`endif
 initial begin  // data input
    @(negedge clk)  rst = 1'b1; 
    #(`CYCLE*2);    rst = 1'b0; 

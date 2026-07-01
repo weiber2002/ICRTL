@@ -50,12 +50,12 @@ always begin #(`CYCLE/2) clk = ~clk; end
 initial begin
 	$display(" Cycle Period = %0f ns", `CYCLE);
 end
-
+`ifdef SDF
 initial begin
-    $fsdbDumpfile("top.fsdb");
-    $fsdbDumpvars(0, TOP);
+    $dumpfile("top.vcd");
+    $dumpvars(0, TOP);
 end
-
+`endif
 //initial begin
 //    $dumpvars();
 //    $dumpfile("JAM.vcd");

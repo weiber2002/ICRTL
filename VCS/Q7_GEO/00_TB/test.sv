@@ -1,0 +1,147 @@
+`timescale 1ns/10ps
+`define CYCLE      50.0
+`define SDFFILE    "../02_SYN/Netlist/top_syn.sdf"
+`define End_CYCLE  1000000
+`define PAT        "../00_TB/grad.data"
+
+module test();
+integer fd;
+integer objnum;
+integer obj_isin;
+integer c;
+integer pass=0;
+integer fail=0;
+reg [9:0] X;
+reg [9:0] Y;
+reg [10:0] R;
+
+reg clk = 0;
+wire valid;
+reg reset =0;
+wire is_inside;
+TOP  TOP(.clk(clk),
+        .reset(reset),
+        .X(X),
+        .Y(Y),
+        .R(R),
+        .valid(valid),
+        .is_inside(is_inside));
+
+`ifdef SDF
+    initial $sdf_annotate(`SDFFILE, TOP);
+`endif
+`ifdef SDF
+	initial begin
+	$dumpfile("top.vcd");
+	$dumpvars(0, test.TOP);
+end
+`endif
+
+always begin #(`CYCLE/2) clk = ~clk; end
+
+initial begin
+    $display("----------------------");
+    $display("-- Simulation Start --");
+    $display("----------------------");
+    @(posedge clk);  #2 reset = 1'b1;
+    #(`CYCLE*2);
+    @(posedge clk);  #2  reset = 1'b0;
+end
+
+reg [31:0] cycle=0;
+
+always @(posedge clk) begin
+    cycle=cycle+1;
+    if (cycle > `End_CYCLE) begin
+        $display("--------------------------------------------------");
+        $display("-- Failed waiting valid signal, Simulation STOP --");
+        $display("Total Error: %0d", fail);
+        $display("total time: %0d cycles", cycle);
+        $display("--------------------------------------------------");
+        $fclose(fd);
+        $finish;
+    end
+end
+
+initial begin
+    fd = $fopen(`PAT,"r");
+    if (fd == 0) begin
+        $display ("pattern handle null");
+        $finish;
+    end
+end
+
+reg wait_valid;
+reg get_inside;
+integer ap_num;
+
+always @(posedge clk ) begin
+    if (reset) begin
+        wait_valid=0;
+    end
+    else begin
+        if(wait_valid == 0) begin
+            if(ap_num ==6) wait_valid =1;
+        end
+        else begin
+            if (valid ==1) begin
+                wait_valid=0;
+                get_inside=is_inside;
+                if(get_inside == obj_isin) begin
+                    pass = pass +1;
+                    $display("Object%0d: Golde/Return => %0d/%d, PASS\n",objnum,obj_isin,get_inside);
+                end
+                else begin
+                    fail = fail +1;
+                    $display("Object%0d: Golde/Return => %0d/%d, FAIL\n",objnum,obj_isin,get_inside);
+                end
+            end
+        end
+    end
+end
+
+always @(negedge clk ) begin
+    if (reset) begin
+        X=0;
+        Y=0;
+        R=0;
+        ap_num = 0;
+    end
+    else begin
+        if (!$feof(fd)) begin
+            if(wait_valid == 0) begin
+                if (ap_num == 0 || ap_num == 6) begin
+                    // Start of a new object: read its header, then the first aperture.
+                    c = $fscanf(fd, " object %d %d", objnum, obj_isin);
+                    if (c == 2) begin
+                        if(obj_isin == 1)
+                            $display ("Object%0d(in):   X     Y     R",objnum);
+                        else
+                            $display ("Object%0d(out):  X     Y     R",objnum);
+                        ap_num = 1;
+                        c = $fscanf(fd, " %d %d %d", X, Y, R);
+                        $display("%d: %d, %d, %d", ap_num, X, Y, R);
+                    end
+                end
+                else begin
+                    ap_num = ap_num + 1;
+                    c = $fscanf(fd, " %d %d %d", X, Y, R);
+                    $display("%d: %d, %d, %d", ap_num, X, Y, R);
+                end
+            end
+        end //if (!$feof(fd)) begin
+        else begin
+             $fclose(fd);
+             $display ("-------------------------------------------------");
+             $display("Total Error: %0d", fail);
+             if(fail == 0)
+                 $display("All tests PASS");
+             else
+                 $display("Simulation finish,  Pass = %2d , Fail = %2d", pass, fail);
+             $display("total time: %0d cycles", cycle);
+             $display ("-------------------------------------------------");
+             $finish;
+        end
+    end
+end
+endmodule

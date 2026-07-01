@@ -56,9 +56,14 @@ module test;
 
     localparam SDFFILE = "../02_SYN/Netlist/top_syn.sdf";
     `ifdef SDF
-        initial $sdf_annotate(SDFFILE, TOP);
+        initial $sdf_annotate(SDFFILE, test.TOP_Control.TOP);
     `endif
-
+    `ifdef SDF
+	initial begin
+	  $dumpfile("top.vcd");
+	  $dumpvars(0, test.TOP_Control.TOP);
+	end
+    `endif
     // initial begin
     //     $dumpfile("GEMM.vcd");
     //     $dumpvars(0, testfixture);
@@ -111,10 +116,10 @@ module test;
 
     );
     
-    initial begin
-        $fsdbDumpfile("top.fsdb");
-        $fsdbDumpvars(0, TOP_Control);
-    end
+   // initial begin
+   //     $fsdbDumpfile("top.fsdb");
+   //     $fsdbDumpvars(0, TOP_Control);
+   // end
     initial begin
         $display(" Cycle Period = %0f ns", `CYCLE);
     end
