@@ -20,7 +20,7 @@ wire valid;
 reg reset =0;
 wire is_inside;
 TOP  TOP(.clk(clk),
-        .reset(reset),
+        .rst(reset),
         .X(X),
         .Y(Y),
         .R(R),
