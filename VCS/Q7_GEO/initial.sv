@@ -1,6 +1,6 @@
-module TOP (clk, reset, X, Y, R, valid, is_inside);
+module TOP (clk, rst, X, Y, R, valid, is_inside);
     input clk;
-    input reset;
+    input rst;
     input [9:0] X;
     input [9:0] Y;
     input [10:0] R;
@@ -41,7 +41,7 @@ module TOP (clk, reset, X, Y, R, valid, is_inside);
     wire        sq_out_valid;
 
     sqrt u_sqrt (
-        .clk(clk), .rst(reset),
+        .clk(clk), .rst(rst),
         .sqrt_in(sq_in), .sqrt_in_valid(sq_in_valid),
         .sqrt_out(sq_out), .sqrt_out_valid(sq_out_valid)
     );
@@ -233,8 +233,8 @@ module TOP (clk, reset, X, Y, R, valid, is_inside);
     endfunction
 
     // ================= sequential =================
-    always@(posedge clk or posedge reset) begin
-        if(reset) begin
+    always@(posedge clk or posedge rst) begin
+        if(rst) begin
             state_r <= IDLE;
             in_count_r <= 0; sort_count_r <= 0; sort_loop_count_r <= 0;
             cal_count_r <= 0; poly_area_r <= 0; tri_sum_r <= 0;
