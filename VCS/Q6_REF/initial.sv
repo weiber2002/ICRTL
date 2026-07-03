@@ -1,6 +1,6 @@
 module TOP(
-    input  wire        CLK,
-    input  wire        RST,
+    input  wire        clk,
+    input  wire        rst,
     input  wire [3:0]  RI,   
     output reg  [8:0]  SRAM_A,
     output reg  [15:0] SRAM_D,
@@ -36,8 +36,8 @@ module TOP(
     // Dsqrt = sqrt( (X^14+Y^14+2^40)·(RI^2-1) + 2^40 )             - 26 bits unsigned
 
     sqrt sqrt_inst (
-        .clk            (CLK),
-        .rst            (RST),
+        .clk            (clk),
+        .rst            (rst),
         .sqrt_in        (sqrt_temp),
         .sqrt_in_valid  (sqrt_valid_r),
         .sqrt_out       (sqrt_out),
@@ -59,8 +59,8 @@ module TOP(
     reg [15:0]  y_delay_r, y_delay_w; // delay y_div_out by 1 cycle to match SRAM_D assignment
 
     divider_optics x_div_inst (
-        .clk            (CLK),
-        .rst            (RST),
+        .clk            (clk),
+        .rst            (rst),
         .div_abc        (x_div_abc_r),
         .div_d          (div_d_r),
         .div_in_valid   (div_in_valid_r),
@@ -69,8 +69,8 @@ module TOP(
     );
 
     divider_optics y_div_inst (
-        .clk            (CLK),
-        .rst            (RST),
+        .clk            (clk),
+        .rst            (rst),
         .div_abc        (y_div_abc_r),
         .div_d          (div_d_r),
         .div_in_valid   (div_in_valid_r),
@@ -181,8 +181,8 @@ module TOP(
         endcase
     end
 
-    always @(posedge CLK or posedge RST) begin
-        if (RST) begin
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
             state_r <= IDLE;
             x_r <= 4'd0;
             y_r <= 4'd0;
