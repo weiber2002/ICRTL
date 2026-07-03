@@ -30,9 +30,12 @@ link
 read_sdf -load_delay net ../02_SYN/Netlist/top_syn.sdf
 
 
-## Measure  power
-#report_switching_activity -list_not_annotated -show_pin
-
+read_sdc ../02_SYN/Netlist/top_syn.sdc
+update_timing -full
+set worst_path [get_timing_paths -delay_type max -nworst 1]
+set wns [get_attribute $worst_path arrival]
+echo $wns > top.wns
+report_timing -delay_type max -nworst 1 > top.timing
 
 read_vcd -strip_path test/TOP  ../03_GATE/top.vcd
 # read_fsdb -time {0 10000}  -strip_path test/TOP_Control/TOP  ../03_GATE/top.fsdb
